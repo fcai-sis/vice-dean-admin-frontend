@@ -58,3 +58,8 @@ export const hallSlotAPI = axios.create({
   baseURL: process.env.HALL_SLOT_API_URL,
   validateStatus: (status) => status < 500,
 });
+
+export const scheduleAPI = axios.create({
+  baseURL: process.env.SCHEDULE_API_URL,
+  validateStatus: (status) => status < 500,
+});
