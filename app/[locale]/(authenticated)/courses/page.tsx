@@ -5,6 +5,7 @@ import { getAccessToken, getCurrentPage, limit } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import DeleteCourseForm from "./DeleteCourseForm";
 
 export const getCourses = async (page: number, department: DepartmentType) => {
   const accessToken = await getAccessToken();
@@ -90,10 +91,13 @@ export default async function Page({
               ))}
             </p>
             <Link href={`/courses/${course.code}`}>View details</Link>
+            <DeleteCourseForm courseId={course._id} />
           </div>
         ))}
         <Pagination totalPages={total / limit} />
       </div>
+
+      <Link href='/courses/create'> Create Course</Link>
     </>
   );
 }
