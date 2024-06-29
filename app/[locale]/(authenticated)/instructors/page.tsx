@@ -4,6 +4,8 @@ import { SelectFilter } from "@/components/SetQueryFilter";
 import { getAccessToken, getCurrentPage, limit } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
+import Link from "next/link";
+import DeleteInstructorForm from "./DeleteInstructorForm";
 
 export const getInstructors = async (
   page: number,
@@ -20,6 +22,8 @@ export const getInstructors = async (
       department,
     },
   });
+
+  console.log(response.data);
 
   if (response.status !== 200) throw new Error("Failed to fetch instructors");
 
@@ -95,10 +99,12 @@ export default async function Page({
                   {instructor.officeHours}
                 </p>
               )}
+              <DeleteInstructorForm instructorId={instructor._id} />
             </div>
           ))}
           <Pagination totalPages={total / limit} />
         </div>
+        <Link href='/instructors/create'> Create Instructor</Link>
       </div>
     </>
   );

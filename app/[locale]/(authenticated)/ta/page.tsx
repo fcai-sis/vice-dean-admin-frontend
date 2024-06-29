@@ -4,6 +4,8 @@ import { SelectFilter } from "@/components/SetQueryFilter";
 import { getAccessToken, getCurrentPage, limit } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
+import DeleteTaForm from "./DeleteTaForm";
+import Link from "next/link";
 
 export const getTeachingAssistants = async (
   page: number,
@@ -55,7 +57,8 @@ export default async function Page({
   const teachingAssistants = response.teachingAssistants;
   const total = response.totalTeachingAssistants;
 
-  const departments = await getDepartments();
+  const departmentResponse = await getDepartments();
+  const departments = departmentResponse.departments;
 
   const departmentOptions = [
     {
@@ -94,10 +97,12 @@ export default async function Page({
                   {ta.officeHours}
                 </p>
               )}
+              <DeleteTaForm taId={ta._id} />
             </div>
           ))}
           <Pagination totalPages={total / limit} />
         </div>
+        <Link href='/ta/create'> Create Teaching Assistant</Link>
       </div>
     </>
   );

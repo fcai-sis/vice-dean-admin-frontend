@@ -50,6 +50,7 @@ export default async function Page({
 
             <p>
               <b>Slot: </b>
+              {lecture.slot.day}{" "}
               {`${lecture.slot.start.hour
                 .toString()
                 .padStart(2, "0")}:${lecture.slot.start.minute
