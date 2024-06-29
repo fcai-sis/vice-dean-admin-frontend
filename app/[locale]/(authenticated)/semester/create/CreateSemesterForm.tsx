@@ -5,6 +5,7 @@ import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { createSemesterAction } from "../actions";
+import { useState } from "react";
 
 const createSemesterFormSchema = z.object({
   season: z.enum(["FALL", "SPRING", "SUMMER", "WINTER"]),
@@ -17,7 +18,8 @@ const createSemesterFormSchema = z.object({
 
 export type CreateSemesterFormValues = z.infer<typeof createSemesterFormSchema>;
 
-export default function CreateSemesterForm() {
+export default function CreateSemesterForm({ courses }: { courses: any[] }) {
+  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const router = useRouter();
   const {
     handleSubmit,
@@ -41,6 +43,11 @@ export default function CreateSemesterForm() {
     name: "courses",
   });
 
+  const handleCourseChange = (index: number, value: string) => {
+    const newSelectedCourses = [...selectedCourses];
+    newSelectedCourses[index] = value;
+    setSelectedCourses(newSelectedCourses);
+  };
   const onSubmit = async (values: CreateSemesterFormValues) => {
     const createSemesterResponse = await createSemesterAction(values);
 
@@ -54,7 +61,7 @@ export default function CreateSemesterForm() {
 
   return (
     <>
-      <h1>Courses</h1>
+      <h1>Create a Semester</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <select {...register("season")}>
@@ -67,11 +74,26 @@ export default function CreateSemesterForm() {
 
         {courseFields.map((field, index) => (
           <div key={field.id}>
-            <input
-              type='text'
+            <select
               {...register(`courses.${index}.course` as const)}
-              placeholder='Course'
-            />
+              defaultValue={field.course}
+              onChange={(e) => handleCourseChange(index, e.target.value)}
+            >
+              <option value='' disabled>
+                Select a course
+              </option>
+              {courses
+                .filter(
+                  (course) =>
+                    !selectedCourses.includes(course.code) ||
+                    course.code === selectedCourses[index]
+                )
+                .map((course) => (
+                  <option key={course.code} value={course.code}>
+                    {course.code}
+                  </option>
+                ))}
+            </select>
             {errors.courses && errors.courses[index] && (
               <span>{errors.courses[index]?.message}</span>
             )}
@@ -79,6 +101,9 @@ export default function CreateSemesterForm() {
               type='button'
               onClick={() => {
                 removeCourse(index);
+                const newSelectedCourses = [...selectedCourses];
+                newSelectedCourses.splice(index, 1);
+                setSelectedCourses(newSelectedCourses);
               }}
             >
               Remove Course
