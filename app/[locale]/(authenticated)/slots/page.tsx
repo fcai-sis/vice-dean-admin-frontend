@@ -27,7 +27,7 @@ export const getSlots = async (page: number) => {
 
 export default async function Page({
   searchParams,
-}: Readonly<{ searchParams: { page: string; department: string } }>) {
+}: Readonly<{ searchParams: { page: string } }>) {
   const page = getCurrentPage(searchParams);
 
   const response = await getSlots(page);

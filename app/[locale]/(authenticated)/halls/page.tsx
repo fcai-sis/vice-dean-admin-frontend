@@ -28,7 +28,7 @@ export const getHalls = async (page: number) => {
 
 export default async function Page({
   searchParams,
-}: Readonly<{ searchParams: { page: string; department: string } }>) {
+}: Readonly<{ searchParams: { page: string } }>) {
   const locale = getCurrentLocale();
   const page = getCurrentPage(searchParams);
 
