@@ -1,9 +1,9 @@
 import dbConnect from "@/database";
-import { StudentModel, UserModel } from "@fcai-sis/shared-models";
+import { AdminModel, AdminType, UserModel } from "@fcai-sis/shared-models";
+import { Role } from "@fcai-sis/shared-middlewares";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
-import { Role } from "@fcai-sis/shared-middlewares";
 
 const handler = NextAuth({
   session: {
@@ -13,26 +13,26 @@ const handler = NextAuth({
     CredentialsProvider({
       name: "credentials",
       credentials: {
-        studentId: { label: "Student ID", type: "number" },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (
           credentials?.password === undefined ||
-          credentials?.studentId === undefined
+          credentials?.username === undefined
         ) {
           return null;
         }
 
         await dbConnect();
 
-        const student = await StudentModel.findOne({
-          studentId: credentials.studentId,
+        const admin: AdminType | null = await AdminModel.findOne({
+          username: credentials.username,
         });
 
-        if (!student) return null;
+        if (!admin) return null;
 
-        const user = await UserModel.findById(student.user);
+        const user = await UserModel.findById(admin.user);
 
         if (!user) return null;
 
@@ -46,7 +46,7 @@ const handler = NextAuth({
         return {
           id: user._id,
           email: user._id,
-          name: Role.STUDENT,
+          name: Role.ADMIN,
         };
       },
     }),

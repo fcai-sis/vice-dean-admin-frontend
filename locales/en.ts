@@ -27,6 +27,7 @@ export default {
   },
   auth: {
     title: "Login",
+    username: "Username",
     studentId: "Student ID",
     password: "Password",
     login: "Login",
