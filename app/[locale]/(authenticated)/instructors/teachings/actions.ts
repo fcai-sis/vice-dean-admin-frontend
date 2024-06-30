@@ -13,19 +13,17 @@ export const createInstructorTeachingAction = async (
   const requestBody = {
     instructorTeaching: {
       ...data,
+      email: undefined,
     },
+    email: data.email,
   };
   console.log(requestBody);
 
-  const response = await scheduleAPI.post(
-    `/instructor-teaching/create`,
-    requestBody,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const response = await scheduleAPI.post(`/instructor-teaching`, requestBody, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   console.log(response.data);
 
   if (response.status !== 201) {
@@ -51,7 +49,7 @@ export const deleteInstructorTeachingAction = async (
   console.log(instructorTeachingId);
 
   const response = await scheduleAPI.delete(
-    `/instructor-teaching/delete/${instructorTeachingId}`,
+    `/instructor-teaching/${instructorTeachingId}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

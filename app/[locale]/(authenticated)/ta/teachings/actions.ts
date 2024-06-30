@@ -13,11 +13,13 @@ export const createTaTeachingAction = async (
   const requestBody = {
     taTeaching: {
       ...data,
+      email: undefined,
     },
+    email: data.email,
   };
   console.log(requestBody);
 
-  const response = await scheduleAPI.post(`/ta-teaching/create`, requestBody, {
+  const response = await scheduleAPI.post(`/ta-teaching`, requestBody, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -47,7 +49,7 @@ export const deleteTaTeachingAction = async (
   console.log(taTeachingId);
 
   const response = await scheduleAPI.delete(
-    `/ta-teaching/delete/${taTeachingId}`,
+    `/ta-teaching/${taTeachingId}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

@@ -38,7 +38,7 @@ export default function DeleteTaTeachingForm({
     }
 
     toast.success("TA teaching deleted");
-    router.push(`/teachings`);
+    router.push(`/ta/teachings`);
   };
 
   return (

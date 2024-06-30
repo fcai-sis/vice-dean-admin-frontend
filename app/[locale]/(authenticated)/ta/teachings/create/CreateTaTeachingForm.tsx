@@ -34,7 +34,7 @@ export default function CreateTaTeachingForm({ courses }: { courses: any[] }) {
     }
 
     toast.success("TA teaching created successfully!");
-    router.push(`/teachings`);
+    router.push(`/ta/teachings`);
   };
 
   return (

@@ -39,7 +39,7 @@ export default function DeleteInstructorTeachingForm({
     }
 
     toast.success("Instructor teaching deleted");
-    router.push(`/teachings`);
+    router.push(`/instructors/teachings`);
   };
 
   return (

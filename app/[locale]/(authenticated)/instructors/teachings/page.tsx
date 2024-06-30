@@ -12,7 +12,7 @@ export const getAllInstructorTeachings = async (
   department: DepartmentType
 ) => {
   const accessToken = await getAccessToken();
-  const response = await scheduleAPI.get(`/all-instructor-teachings`, {
+  const response = await scheduleAPI.get(`/instructor-teaching`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -99,6 +99,12 @@ export default async function Page({
                   {teaching.instructor.officeHours}
                 </p>
               )}
+
+              <p>
+                <b>Course: </b>
+                {teaching.course.code}
+              </p>
+
               <DeleteInstructorTeachingForm
                 instructorTeachingId={teaching._id}
               />

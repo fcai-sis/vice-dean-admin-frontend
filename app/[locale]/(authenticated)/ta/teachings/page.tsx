@@ -12,7 +12,7 @@ export const getAllTaTeachings = async (
   department: DepartmentType
 ) => {
   const accessToken = await getAccessToken();
-  const response = await scheduleAPI.get(`/all-ta-teachings`, {
+  const response = await scheduleAPI.get(`/ta-teaching`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -99,6 +99,10 @@ export default async function Page({
                   {teaching.ta.officeHours}
                 </p>
               )}
+              <p>
+                <b>Course: </b>
+                {teaching.course.code}
+              </p>
               <DeleteTaTeachingForm taTeachingId={teaching._id} />
             </div>
           ))}

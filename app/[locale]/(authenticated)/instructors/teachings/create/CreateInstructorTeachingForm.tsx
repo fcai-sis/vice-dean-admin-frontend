@@ -39,7 +39,7 @@ export default function CreateInstructorTeachingForm({
     }
 
     toast.success("Instructor teaching created successfully!");
-    router.push(`/teachings`);
+    router.push(`/instructors/teachings`);
   };
 
   return (
