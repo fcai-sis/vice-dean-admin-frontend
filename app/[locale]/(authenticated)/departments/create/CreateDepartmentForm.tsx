@@ -12,7 +12,7 @@ const createDepartmentFormSchema = z.object({
     ar: z.string(),
   }),
   code: z.string(),
-  program: z.enum(["GENERAL", "SPECIALIZATION", "SPECIAL"]),
+  program: z.enum(["GENERAL", "SPECIAL"]),
   capacity: z.number(),
 });
 
@@ -65,7 +65,6 @@ export default function CreateDepartmentForm() {
         <label>Program</label>
         <select {...register("program")}>
           <option value='GENERAL'>General</option>
-          <option value='SPECIALIZATION'>Specialization</option>
           <option value='SPECIAL'>Special</option>
         </select>
         <label>Capacity</label>
