@@ -8,7 +8,7 @@ import { dummySlotsByDay, dummyTimeRanges } from "@/dummy/slots";
 import { fakeResponse, localizedLevel } from "@/dummy/utils";
 import { getAccessToken, tt } from "@/lib";
 import { getCurrentLocale, getI18n } from "@/locales/server";
-import { getStudentServiceRequests } from "./requests/page";
+// import { getStudentServiceRequests } from "./requests/page";
 import { getAnnouncements } from "./announcements/page";
 import { studentsAPI } from "@/api";
 import { revalidatePath } from "next/cache";
@@ -37,7 +37,7 @@ export default async function Page() {
   const student = getStudentResponse.student;
 
   const { announcements } = await getAnnouncements(1);
-  const { serviceRequests } = await getStudentServiceRequests(1);
+  // const { serviceRequests } = await getStudentServiceRequests(1);
 
   const _eligibleCourses = dummyCourses;
   const _schedule = dummySchedule;
@@ -123,12 +123,12 @@ export default async function Page() {
             <AnnouncementCard key={index} announcement={announcement} />
           ))}
         </div>
-        <div className='w-full'>
+        {/* <div className='w-full'>
           <h2>{t("serviceRequests.title")}</h2>
           {serviceRequests.map((serviceRequest: any, i: number) => (
             <ServiceRequestCard key={i} serviceRequest={serviceRequest} />
           ))}
-        </div>
+        </div> */}
       </div>
     </>
   );
