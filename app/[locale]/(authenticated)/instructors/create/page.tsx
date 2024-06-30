@@ -10,7 +10,7 @@ export default async function Page({
   const response = await getDepartments();
   const departments = response.departments;
   const filteredDepartments = departments.filter(
-    (department: DepartmentType) => department.program === "SPECIALIZATION"
+    (department: DepartmentType) => department.program === "GENERAL"
   );
 
   return (
