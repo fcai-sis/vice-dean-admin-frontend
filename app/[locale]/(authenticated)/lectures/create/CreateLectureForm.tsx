@@ -91,7 +91,8 @@ export default function CreateLectureForm({
               -{" "}
               {`${slot.end.hour.toString().padStart(2, "0")}:${slot.end.minute
                 .toString()
-                .padStart(2, "0")}`}
+                .padStart(2, "0")}`}{" "}
+              {slot.day}
             </option>
           ))}
         </select>
