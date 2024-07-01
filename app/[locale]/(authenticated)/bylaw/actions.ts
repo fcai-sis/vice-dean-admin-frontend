@@ -37,7 +37,7 @@ interface IBylaw {
     percentage: {
       min: number;
       max: number;
-    }
+    };
   }[];
   levelRequirements: {
     key: string;
@@ -52,6 +52,8 @@ interface IBylaw {
     electiveHours?: number;
     totalHours?: number;
   }[];
+  graduateRequirement: number;
+  coursePassCriteria: number;
   yearApplied: number;
 }
 
@@ -63,6 +65,8 @@ interface TransformedBylaw {
   gradeWeights: Record<string, GradeWeight>;
   levelRequirements: Record<string, LevelRequirement>;
   graduationProjectRequirements: Record<string, GraduationProjectRequirement>;
+  graduateRequirement: number;
+  coursePassCriteria: number;
   yearApplied: number;
 }
 
@@ -72,7 +76,7 @@ const transformBylawData = (submittedData: IBylaw): TransformedBylaw => {
     gradeWeights: submittedData.gradeWeights.reduce((acc, item) => {
       acc[item.key] = {
         weight: item.weight,
-        percentage: item.percentage
+        percentage: item.percentage,
       };
       return acc;
     }, {} as Record<string, GradeWeight>),
@@ -81,18 +85,19 @@ const transformBylawData = (submittedData: IBylaw): TransformedBylaw => {
         mandatoryHours: item.mandatoryHours,
         electiveHours: item.electiveHours,
         totalHours: item.totalHours,
-        maxYears: item.maxYears
+        maxYears: item.maxYears,
       };
       return acc;
     }, {} as Record<string, LevelRequirement>),
-    graduationProjectRequirements: submittedData.graduationProjectRequirements.reduce((acc, item) => {
-      acc[item.key] = {
-        mandatoryHours: item.mandatoryHours,
-        electiveHours: item.electiveHours,
-        totalHours: item.totalHours
-      };
-      return acc;
-    }, {} as Record<string, GraduationProjectRequirement>),
+    graduationProjectRequirements:
+      submittedData.graduationProjectRequirements.reduce((acc, item) => {
+        acc[item.key] = {
+          mandatoryHours: item.mandatoryHours,
+          electiveHours: item.electiveHours,
+          totalHours: item.totalHours,
+        };
+        return acc;
+      }, {} as Record<string, GraduationProjectRequirement>),
   };
 };
 
@@ -103,11 +108,11 @@ export const createBylawAction = async (data: BylawFormValues) => {
   const submittedData: IBylaw = { ...data };
   console.log("submittedData", submittedData);
   const requestBody = transformBylawData(submittedData);
-  
+
   console.log("requestBody", requestBody);
-  
+
   // Here you would typically make the API call
- const response = await bylawAPI.post(`/`, requestBody, {
+  const response = await bylawAPI.post(`/`, requestBody, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
