@@ -68,3 +68,26 @@ export const updateSemesterAction = async (data: UpdateSemesterFormValues) => {
 
   return { success: true };
 };
+
+export const endSemesterAction = async () => {
+  const accessToken = await getAccessToken();
+
+  const response = await semesterAPI.post(`/end`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (response.status !== 200) {
+    return {
+      success: false,
+      error: {
+        message: response.data.error.message,
+      },
+    };
+  }
+
+  revalidatePath("/semester");
+
+  return { success: true };
+};

@@ -2,6 +2,7 @@ import { semesterAPI } from "@/api";
 import { getAccessToken } from "@/lib";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
+import EndSemesterForm from "./EndSemesterForm";
 
 export const getLatestSemester = async () => {
   const accessToken = await getAccessToken();
@@ -49,6 +50,7 @@ export default async function Page({
       </div>
 
       <Link href='/semester/create'>Create Semester</Link>
+      <EndSemesterForm />
     </>
   );
 }
