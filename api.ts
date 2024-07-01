@@ -68,3 +68,8 @@ export const bylawAPI = axios.create({
   baseURL: process.env.BYLAWS_API_URL,
   validateStatus: (status) => status < 500,
 });
+
+export const configAPI = axios.create({
+  baseURL: process.env.CONFIG_API_URL,
+  validateStatus: (status) => status < 500,
+});
