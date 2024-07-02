@@ -258,7 +258,7 @@ export default function CreateBylawForm({
             {gradeWeightFields.map((field, index) => (
               <li
                 key={field.id}
-                className='border border-gray-300 p-4 rounded-md'
+                className='border border-gray-300 p-4 rounded-md list-none'
               >
                 <div>
                   <label
@@ -367,7 +367,7 @@ export default function CreateBylawForm({
             {levelRequirementFields.map((field, index) => (
               <li
                 key={field.id}
-                className='border border-gray-300 p-4 rounded-md'
+                className='border border-gray-300 p-4 rounded-md list-none'
               >
                 <div>
                   <label
@@ -500,16 +500,16 @@ export default function CreateBylawForm({
             {graduationProjectRequirementFields.map((field, index) => (
               <li
                 key={field.id}
-                className='border border-gray-300 p-4 rounded-md'
+                className='border border-gray-300 p-4 rounded-md list-none'
               >
                  <select
                     id={`graduationProjectRequirements.${index}.key`}
                     {...register(`graduationProjectRequirements.${index}.key`)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 bg-white text-gray-900"
                     defaultValue={field.key}
                     onChange={(e) => handleDepartmentChange(index, e.target.value)}
                   >
-                    <option value="" disabled>{t("bylaw.create.form.selectDepartmentCode")}</option>
+                    <option value="" disabled className="text-gray-500">{t("bylaw.create.form.selectDepartmentCode")}</option>
                     {departments.filter(
                       (department) =>
                         !selectedDepartments.includes(department.code) ||
@@ -519,11 +519,6 @@ export default function CreateBylawForm({
                         {department.code}
                       </option>
                     ))}
-                    {/* {departments.map((department) => (
-                      <option key={department._id} value={department.code}>
-                        {department.code}
-                      </option>
-                    ))} */}
                   </select>
                   {errors.graduationProjectRequirements?.[index]?.key && (
                     <p className="mt-1 text-red-500 text-sm">
