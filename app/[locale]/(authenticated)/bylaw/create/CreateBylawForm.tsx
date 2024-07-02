@@ -5,6 +5,8 @@ import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { createBylawAction } from "../actions";
+import { useMemo, useState } from "react";
+import { useCurrentLocale, useI18n } from "@/locales/client";
 
 const gradeSchema = z.object({
   key: z.string().nonempty("Key is required"),
@@ -73,7 +75,15 @@ const bylawSchema = z.object({
 
 export type BylawFormValues = z.infer<typeof bylawSchema>;
 
-export default function CreateBylawForm() {
+export default function CreateBylawForm({
+  departments
+}:{
+  departments: any[];
+}
+) {
+  const t = useI18n();
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
+  const maxGraduationProjectRequirements = useMemo(() => departments.length, [departments]);
   const router = useRouter();
   const {
     handleSubmit,
@@ -129,6 +139,14 @@ export default function CreateBylawForm() {
     name: "graduationProjectRequirements",
   });
 
+  const canAddGraduationProjectRequirement = graduationProjectRequirementFields.length < maxGraduationProjectRequirements;
+
+  const handleDepartmentChange = (index: number, value: string) => {
+    const newSelectedDepartments = [...selectedDepartments];
+    newSelectedDepartments[index] = value;
+    setSelectedDepartments(newSelectedDepartments);
+  };
+
   const onSubmit = async (values: BylawFormValues) => {
     const createBylawResponse = await createBylawAction(values);
 
@@ -142,15 +160,15 @@ export default function CreateBylawForm() {
 
   return (
     <>
-      <h1 className='text-2xl font-bold'>Create Bylaw</h1>
+      <h1 className='text-2xl font-bold'>{t("bylaw.create.title")}</h1>
       <p className='mt-2 text-sm text-gray-600'>
-        <span className='text-red-500'>*</span> indicates a required field.
+        <span className='text-red-500'>*</span> {t("bylaw.create.form.required")}
       </p>
 
       <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
         <div>
           <label htmlFor='name' className='block font-medium text-gray-700'>
-            Bylaw Name <span className='text-red-500'>*</span>:
+            {t("bylaw.create.form.name")} <span className='text-red-500'>*</span>:
           </label>
           <input
             id='name'
@@ -165,7 +183,7 @@ export default function CreateBylawForm() {
 
         <div>
           <label htmlFor='gpaScale' className='block font-medium text-gray-700'>
-            GPA Scale <span className='text-red-500'>*</span>:
+            {t("bylaw.create.form.gpaScale")} <span className='text-red-500'>*</span>:
           </label>
           <input
             id='gpaScale'
@@ -191,7 +209,7 @@ export default function CreateBylawForm() {
               {...register("useDetailedHours")}
               className='form-checkbox text-blue-500'
             />
-            <span className='ml-2 text-gray-700'>Use Detailed Hours</span>
+            <span className='ml-2 text-gray-700'>{t("bylaw.create.form.useDetailedHours")}</span>
           </label>
         </div>
 
@@ -207,7 +225,7 @@ export default function CreateBylawForm() {
               className='form-checkbox text-blue-500'
             />
             <span className='ml-2 text-gray-700'>
-              Use Detailed Graduation Project Hours
+              {t("bylaw.create.form.useDetailedGraduationProjectHours")}
             </span>
           </label>
         </div>
@@ -217,7 +235,7 @@ export default function CreateBylawForm() {
             htmlFor='yearApplied'
             className='block font-medium text-gray-700'
           >
-            Year Applied <span className='text-red-500'>*</span>:
+            {t("bylaw.create.form.yearApplied")} <span className='text-red-500'>*</span>:
           </label>
           <input
             id='yearApplied'
@@ -234,7 +252,7 @@ export default function CreateBylawForm() {
 
         <fieldset>
           <legend className='block text-lg font-medium text-gray-700'>
-            Grade Weights
+            {t("bylaw.create.form.gradeWeights")}
           </legend>
           <ul className='space-y-4'>
             {gradeWeightFields.map((field, index) => (
@@ -262,7 +280,7 @@ export default function CreateBylawForm() {
                     htmlFor={`gradeWeights.${index}.weight`}
                     className='block font-medium text-gray-700'
                   >
-                    Weight <span className='text-red-500'>*</span>:
+                    {t("bylaw.create.form.gradeWeight")} <span className='text-red-500'>*</span>:
                   </label>
                   <input
                     id={`gradeWeights.${index}.weight`}
@@ -281,7 +299,7 @@ export default function CreateBylawForm() {
                     htmlFor={`gradeWeights.${index}.percentage.min`}
                     className='block font-medium text-gray-700'
                   >
-                    Min Percentage <span className='text-red-500'>*</span>:
+                    {t("bylaw.create.form.minPercentage")} <span className='text-red-500'>*</span>:
                   </label>
                   <input
                     id={`gradeWeights.${index}.percentage.min`}
@@ -301,7 +319,7 @@ export default function CreateBylawForm() {
                     htmlFor={`gradeWeights.${index}.percentage.max`}
                     className='block font-medium text-gray-700'
                   >
-                    Max Percentage <span className='text-red-500'>*</span>:
+                    {t("bylaw.create.form.maxPercentage")} <span className='text-red-500'>*</span>:
                   </label>
                   <input
                     id={`gradeWeights.${index}.percentage.max`}
@@ -321,7 +339,7 @@ export default function CreateBylawForm() {
                   onClick={() => removeGradeWeight(index)}
                   className='mt-2 text-red-500 hover:underline'
                 >
-                  Remove
+                  {t("bylaw.create.form.remove")}
                 </button>
               </li>
             ))}
@@ -337,13 +355,13 @@ export default function CreateBylawForm() {
             }
             className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
           >
-            Add Grade Weight
+            {t("bylaw.create.form.addGradeWeight")}
           </button>
         </fieldset>
 
         <fieldset>
           <legend className='block text-lg font-medium text-gray-700'>
-            Level Requirements
+            {t("bylaw.create.form.levelRequirements")}
           </legend>
           <ul className='space-y-4'>
             {levelRequirementFields.map((field, index) => (
@@ -373,7 +391,7 @@ export default function CreateBylawForm() {
                         htmlFor={`levelRequirements.${index}.mandatoryHours`}
                         className='block font-medium text-gray-700'
                       >
-                        Mandatory Hours <span className='text-red-500'>*</span>:
+                        {t("bylaw.create.form.mandatoryHours")} <span className='text-red-500'>*</span>:
                       </label>
                       <input
                         id={`levelRequirements.${index}.mandatoryHours`}
@@ -392,7 +410,7 @@ export default function CreateBylawForm() {
                         htmlFor={`levelRequirements.${index}.electiveHours`}
                         className='block font-medium text-gray-700'
                       >
-                        Elective Hours <span className='text-red-500'>*</span>:
+                        {t("bylaw.create.form.electiveHours")} <span className='text-red-500'>*</span>:
                       </label>
                       <input
                         id={`levelRequirements.${index}.electiveHours`}
@@ -413,7 +431,7 @@ export default function CreateBylawForm() {
                       htmlFor={`levelRequirements.${index}.totalHours`}
                       className='block font-medium text-gray-700'
                     >
-                      Total Hours <span className='text-red-500'>*</span>:
+                      {t("bylaw.create.form.totalHours")} <span className='text-red-500'>*</span>:
                     </label>
                     <input
                       id={`levelRequirements.${index}.totalHours`}
@@ -433,7 +451,7 @@ export default function CreateBylawForm() {
                     htmlFor={`levelRequirements.${index}.maxYears`}
                     className='block font-medium text-gray-700'
                   >
-                    Max Years <span className='text-red-500'>*</span>:
+                    {t("bylaw.create.form.maxYears")} <span className='text-red-500'>*</span>:
                   </label>
                   <input
                     id={`levelRequirements.${index}.maxYears`}
@@ -452,7 +470,7 @@ export default function CreateBylawForm() {
                   onClick={() => removeLevelRequirement(index)}
                   className='mt-2 text-red-500 hover:underline'
                 >
-                  Remove
+                  {t("bylaw.create.form.remove")}
                 </button>
               </li>
             ))}
@@ -470,13 +488,13 @@ export default function CreateBylawForm() {
             }
             className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
           >
-            Add Level Requirement
+            {t("bylaw.create.form.addLevelRequirements")}
           </button>
         </fieldset>
 
         <fieldset>
           <legend className='block text-lg font-medium text-gray-700'>
-            Graduation Project Requirements
+            {t("bylaw.create.form.graduationProjectRequirements")}
           </legend>
           <ul className='space-y-4'>
             {graduationProjectRequirementFields.map((field, index) => (
@@ -484,23 +502,34 @@ export default function CreateBylawForm() {
                 key={field.id}
                 className='border border-gray-300 p-4 rounded-md'
               >
-                <div>
-                  <label
-                    htmlFor={`graduationProjectRequirements.${index}.key`}
-                    className='block font-medium text-gray-700'
-                  >
-                    Key <span className='text-red-500'>*</span>:
-                  </label>
-                  <input
+                 <select
                     id={`graduationProjectRequirements.${index}.key`}
-                    type='text'
-                    placeholder='Key'
-                    {...register(
-                      `graduationProjectRequirements.${index}.key` as const
-                    )}
-                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
-                  />
-                </div>
+                    {...register(`graduationProjectRequirements.${index}.key`)}
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+                    defaultValue={field.key}
+                    onChange={(e) => handleDepartmentChange(index, e.target.value)}
+                  >
+                    <option value="" disabled>{t("bylaw.create.form.selectDepartmentCode")}</option>
+                    {departments.filter(
+                      (department) =>
+                        !selectedDepartments.includes(department.code) ||
+                        department.code === selectedDepartments[index]
+                    ).map((department) => (
+                      <option key={department._id} value={department.code}>
+                        {department.code}
+                      </option>
+                    ))}
+                    {/* {departments.map((department) => (
+                      <option key={department._id} value={department.code}>
+                        {department.code}
+                      </option>
+                    ))} */}
+                  </select>
+                  {errors.graduationProjectRequirements?.[index]?.key && (
+                    <p className="mt-1 text-red-500 text-sm">
+                      {errors.graduationProjectRequirements[index]?.key?.message}
+                    </p>
+                  )}
                 {useDetailedGraduationProjectHours ? (
                   <>
                     <div>
@@ -508,7 +537,7 @@ export default function CreateBylawForm() {
                         htmlFor={`graduationProjectRequirements.${index}.mandatoryHours`}
                         className='block font-medium text-gray-700'
                       >
-                        Mandatory Hours <span className='text-red-500'>*</span>:
+                        {t("bylaw.create.form.mandatoryHours")} <span className='text-red-500'>*</span>:
                       </label>
                       <input
                         id={`graduationProjectRequirements.${index}.mandatoryHours`}
@@ -527,7 +556,7 @@ export default function CreateBylawForm() {
                         htmlFor={`graduationProjectRequirements.${index}.electiveHours`}
                         className='block font-medium text-gray-700'
                       >
-                        Elective Hours <span className='text-red-500'>*</span>:
+                        {t("bylaw.create.form.electiveHours")} <span className='text-red-500'>*</span>:
                       </label>
                       <input
                         id={`graduationProjectRequirements.${index}.electiveHours`}
@@ -548,7 +577,7 @@ export default function CreateBylawForm() {
                       htmlFor={`graduationProjectRequirements.${index}.totalHours`}
                       className='block font-medium text-gray-700'
                     >
-                      Total Hours <span className='text-red-500'>*</span>:
+                      {t("bylaw.create.form.totalHours")} <span className='text-red-500'>*</span>:
                     </label>
                     <input
                       id={`graduationProjectRequirements.${index}.totalHours`}
@@ -568,11 +597,12 @@ export default function CreateBylawForm() {
                   onClick={() => removeGraduationProjectRequirement(index)}
                   className='mt-2 text-red-500 hover:underline'
                 >
-                  Remove
+                  {t("bylaw.create.form.remove")}
                 </button>
               </li>
             ))}
           </ul>
+          {canAddGraduationProjectRequirement && (
           <button
             type='button'
             onClick={() =>
@@ -585,8 +615,9 @@ export default function CreateBylawForm() {
             }
             className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
           >
-            Add Graduation Project Requirement
+            {t("bylaw.create.form.addGraduationProjectRequirements")}
           </button>
+          )}
         </fieldset>
 
         <div>
@@ -594,7 +625,7 @@ export default function CreateBylawForm() {
             htmlFor='graduateRequirement'
             className='block font-medium text-gray-700'
           >
-            Graduation Requirement <span className='text-red-500'>*</span>:
+            {t("bylaw.create.form.graduationRequirement")} <span className='text-red-500'>*</span>:
           </label>
           <input
             id='graduateRequirement'
@@ -609,8 +640,7 @@ export default function CreateBylawForm() {
           )}
 
           <p className='mt-2 text-sm text-gray-600'>
-            Graduation requirement is the minimum credit hours required to
-            graduate.
+            {t("bylaw.create.form.graduationRequirementDescription")}
           </p>
         </div>
 
@@ -619,7 +649,7 @@ export default function CreateBylawForm() {
             htmlFor='coursePassCriteria'
             className='block font-medium text-gray-700'
           >
-            Course Pass Criteria <span className='text-red-500'>*</span>:
+            {t("bylaw.create.form.coursePassCriteria")} <span className='text-red-500'>*</span>:
           </label>
           <input
             id='coursePassCriteria'
@@ -634,7 +664,7 @@ export default function CreateBylawForm() {
           )}
 
           <p className='mt-2 text-sm text-gray-600'>
-            Course pass criteria is the minimum grade required to pass a course.
+            {t("bylaw.create.form.coursePassCriteriaDescription")}
           </p>
         </div>
 
@@ -643,7 +673,7 @@ export default function CreateBylawForm() {
           disabled={isSubmitting}
           className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50'
         >
-          {isSubmitting ? "Submitting..." : "Submit"}
+          {isSubmitting ? t("bylaw.create.form.submitting"): t("bylaw.create.form.submit")}
         </button>
       </form>
     </>

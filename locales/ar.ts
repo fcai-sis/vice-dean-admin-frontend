@@ -1,3 +1,5 @@
+import { totalmem } from "os";
+
 // locales/ar.ts
 export default {
   general: {
@@ -124,4 +126,45 @@ export default {
   profile: {
     title: "الملف الشخصي",
   },
+  bylaw: {
+    title: "اللوائح",
+    create: {
+      title: "إنشاء لائحة",
+      form: {
+        title: "العنوان",
+        content: "المحتوى",
+        required: "يشير إلى حقل مطلوب",
+        name: "اسم اللائحة",
+        gpaScale: "مقياس الجي بي اي",
+        useDetailedHours: "استخدام ساعات التفصيل",
+        useDetailedGraduationProjectHours: "استخدام ساعات مشروع التخرج التفصيلية",
+        yearApplied: "السنة المطبقة",
+        gradeWeights: "أوزان الدرجات",
+        gradeWeight: "وزن الدرجة",
+        minPercentage: "النسبة المئوية الدنيا",
+        maxPercentage: "النسبة المئوية العليا",
+        remove: "حذف",
+        addGradeWeight: "إضافة وزن الدرجة",
+        levelRequirements: "متطلبات المستوى",
+        mandatoryHours: "ساعات إجبارية",
+        electiveHours: "ساعات اختيارية",
+        totalHours: "إجمالي الساعات",
+        maxYears: "أقصى سنوات",
+        addLevelRequirements: "إضافة متطلبات المستوى",
+        graduationProjectRequirements: "متطلبات مشروع التخرج",
+        selectDepartmentCode: "اختر رمز القسم",
+        addGraduationProjectRequirements: "إضافة متطلبات مشروع التخرج",
+        graduationRequirement: "متطلب التخرج",
+        graduationRequirementDescription: "متطلب التخرج هو الحد الأدنى لساعات الائتمان المطلوبة للتخرج.",
+        coursePassCriteria: "معيار اجتياز المقرر",
+        coursePassCriteriaDescription: "معيار اجتياز المقرر هو الحد الأدنى للنسبة المئوية المطلوبة لاجتياز المقرر.",
+        submit: "إرسال",
+        submitting: "جاري الإرسال...",
+      },
+      success: "تم إنشاء اللائحة بنجاح",
+      error: {
+        createFailed: "فشل إنشاء اللائحة",
+      },
+    },
+  }
 } as const;
