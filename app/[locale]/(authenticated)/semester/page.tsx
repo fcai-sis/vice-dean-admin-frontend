@@ -3,6 +3,7 @@ import { getAccessToken } from "@/lib";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import EndSemesterForm from "./EndSemesterForm";
+import BeginDepartmentAssignment from "./BeginDepartmentAssignment";
 
 export const getLatestSemester = async () => {
   const accessToken = await getAccessToken();
@@ -51,6 +52,7 @@ export default async function Page({
 
       <Link href='/semester/create'>Create Semester</Link>
       <EndSemesterForm />
+      <BeginDepartmentAssignment/>
     </>
   );
 }

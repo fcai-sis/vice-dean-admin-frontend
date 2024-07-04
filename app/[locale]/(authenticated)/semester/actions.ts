@@ -1,7 +1,7 @@
 "use server";
 import { getAccessToken } from "@/lib";
 import { CreateSemesterFormValues } from "./create/CreateSemesterForm";
-import { semesterAPI } from "@/api";
+import { departmentEnrollmentAPI, semesterAPI } from "@/api";
 import { revalidatePath } from "next/cache";
 import { UpdateSemesterFormValues } from "./update/UpdateSemesterForm";
 
@@ -73,6 +73,29 @@ export const endSemesterAction = async () => {
   const accessToken = await getAccessToken();
 
   const response = await semesterAPI.post(`/end`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (response.status !== 200) {
+    return {
+      success: false,
+      error: {
+        message: response.data.error.message,
+      },
+    };
+  }
+
+  revalidatePath("/semester");
+
+  return { success: true };
+};
+
+export const departmentAssignmentAction = async () => {
+  const accessToken = await getAccessToken();
+
+  const response = await departmentEnrollmentAPI.post(`/assign`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

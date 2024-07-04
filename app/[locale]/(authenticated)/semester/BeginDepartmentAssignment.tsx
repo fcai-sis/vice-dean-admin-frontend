@@ -2,9 +2,9 @@
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { endSemesterAction } from "./actions";
+import { departmentAssignmentAction } from "./actions";
 
-export default function EndSemesterForm() {
+export default function BeginDepartmentAssignment() {
   const router = useRouter();
   const {
     handleSubmit,
@@ -13,10 +13,10 @@ export default function EndSemesterForm() {
   } = useForm({});
 
   const onSubmit = async () => {
-    const endSemesterResponse = await endSemesterAction();
+    const departmentAssignmentResponse = await departmentAssignmentAction();
 
-    if (!endSemesterResponse.success) {
-      return toast.error(endSemesterResponse.error?.message);
+    if (!departmentAssignmentResponse.success) {
+      return toast.error(departmentAssignmentResponse.error?.message);
     }
 
     toast.success("Semester has ended...");
@@ -25,18 +25,16 @@ export default function EndSemesterForm() {
 
   return (
     <>
-      <h1>End Latest Semester?</h1>
+      <h1>Begin Department Assignment?</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <button
-          className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out active:bg-red-700 mb-4'
+          className='bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out active:bg-gray-700 mb-4'
           type='submit'
           disabled={isSubmitting}
           onClick={(e) => {
             if (
-              confirm(
-                "Are you sure you want to end the semester? This action is irreversible."
-              )
+              confirm("Are you sure you want to begin department assignment?")
             ) {
               onSubmit();
             } else {
@@ -44,7 +42,7 @@ export default function EndSemesterForm() {
             }
           }}
         >
-          {isSubmitting ? "Processing..." : "End"}
+          {isSubmitting ? "Processing..." : "Assign Departments To Students"}
         </button>
       </form>
     </>
