@@ -13,7 +13,6 @@ export const createLectureAction = async (data: CreateLectureFormValues) => {
       ...data,
     },
   };
-  console.log(requestBody);
 
   const response = await scheduleAPI.post(`/lecture`, requestBody, {
     headers: {
@@ -22,6 +21,8 @@ export const createLectureAction = async (data: CreateLectureFormValues) => {
   });
 
   if (response.status !== 201) {
+    console.log(response.data);
+
     return {
       success: false,
       error: {
@@ -39,14 +40,12 @@ export const deleteLectureAction = async (data: deleteLectureFormValues) => {
   const accessToken = await getAccessToken();
 
   const lectureId = data.lectureId;
-  console.log(lectureId);
 
   const response = await scheduleAPI.delete(`/lecture/${lectureId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log(response.data);
 
   if (response.status !== 200) {
     return {

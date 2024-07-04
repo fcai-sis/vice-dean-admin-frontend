@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import EndSemesterForm from "./EndSemesterForm";
 import BeginDepartmentAssignment from "./BeginDepartmentAssignment";
+import { redirect } from "next/navigation";
 
 export const getLatestSemester = async () => {
   const accessToken = await getAccessToken();
@@ -15,7 +16,7 @@ export const getLatestSemester = async () => {
   });
   console.log(response.data);
 
-  if (response.status !== 200) throw new Error("Failed to fetch semester");
+  if (response.status !== 200) redirect("/semester/create");
 
   revalidatePath("/semester");
 
@@ -40,19 +41,19 @@ export default async function Page({
         </h2>
 
         {semestercourses.map((course: any) => (
-          <div className='border border-black w-80' key={course.id}>
+          <div className="border border-black w-80" key={course.id}>
             <p>
               <b>Course: </b>
               {course.code}
             </p>
           </div>
         ))}
-        <Link href='/semester/update'>Update Semester</Link>
+        <Link href="/semester/update">Update Semester</Link>
       </div>
 
-      <Link href='/semester/create'>Create Semester</Link>
+      <Link href="/semester/create">Create Semester</Link>
       <EndSemesterForm />
-      <BeginDepartmentAssignment/>
+      <BeginDepartmentAssignment />
     </>
   );
 }

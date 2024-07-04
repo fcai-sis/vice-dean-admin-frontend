@@ -39,7 +39,7 @@ export const getHalls = async () => {
 export const getSlots = async () => {
   const accessToken = await getAccessToken();
 
-  const response = await hallSlotAPI.get(`/slot/slots`, {
+  const response = await hallSlotAPI.get(`/slot`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -64,9 +64,26 @@ export default async function Page({
   const slotResponse = await getSlots();
   const slots = slotResponse.slots;
 
+  /**
+   * slots: {
+      FRIDAY: [ slot, slot, slot ]
+   *  }
+   */
+
+  const flattenedSlots = [];
+  for (const day in slots) {
+    for (const slot of slots[day]) {
+      flattenedSlots.push(slot);
+    }
+  }
+
   return (
     <>
-      <CreateLectureForm courses={courses} halls={halls} slots={slots} />
+      <CreateLectureForm
+        courses={courses}
+        halls={halls}
+        slots={flattenedSlots}
+      />
     </>
   );
 }

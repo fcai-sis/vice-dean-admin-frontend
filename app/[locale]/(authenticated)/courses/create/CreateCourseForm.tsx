@@ -59,23 +59,27 @@ export default function CreateCourseForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>Hall Name</label>
         <input
-          type='text'
-          placeholder='English name'
+          type="text"
+          placeholder="English name"
           {...register("name.en")}
         />
         {errors.name?.en && <p>{errors.name.en.message}</p>}
-        <input type='text' placeholder='Arabic name' {...register("name.ar")} />
+        <input type="text" placeholder="Arabic name" {...register("name.ar")} />
         {errors.name?.ar && <p>{errors.name.ar.message}</p>}
         <label>Code</label>
-        <input type='text' placeholder='Code' {...register("code")} />
+        <input type="text" placeholder="Code" {...register("code")} />
         {errors.code && <p>{errors.code.message}</p>}
         <label>Description</label>
-        <input type='text' placeholder='Description' {...register("description")} />
+        <input
+          type="text"
+          placeholder="Description"
+          {...register("description")}
+        />
         {errors.description && <p>{errors.description.message}</p>}
         <label>Credit Hours</label>
         <input
-          type='number'
-          placeholder='Credit Hours'
+          type="number"
+          placeholder="Credit Hours"
           {...register("creditHours", { valueAsNumber: true })}
         />
         {errors.creditHours && <p>{errors.creditHours.message}</p>}
@@ -86,7 +90,7 @@ export default function CreateCourseForm() {
           <option value={CourseTypeEnum[2]}>Graduation</option>
         </select> */}
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <button className="btn" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
         </button>
       </form>

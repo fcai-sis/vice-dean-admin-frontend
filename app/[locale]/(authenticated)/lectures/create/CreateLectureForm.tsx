@@ -53,36 +53,30 @@ export default function CreateLectureForm({
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <label>Course</label>
-        <select {...register("course")}>
-          <option disabled selected>
-            Select a course
-          </option>
-          {courses.map((course) => (
-            <option key={course._id} value={course.code}>
+        <select {...register("course")} defaultValue={""} required>
+          <option disabled>Select a course</option>
+          {courses.map((course, index) => (
+            <option key={index} value={course.code}>
               {course.code}
             </option>
           ))}
         </select>
         {errors.course && <p>{errors.course.message}</p>}
         <label>Hall</label>
-        <select {...register("hall")}>
-          <option disabled selected>
-            Select a hall
-          </option>
-          {halls.map((hall) => (
-            <option key={hall._id} value={hall._id}>
+        <select {...register("hall")} defaultValue={""} required>
+          <option disabled>Select a hall</option>
+          {halls.map((hall, index) => (
+            <option key={index} value={hall._id}>
               {tt(locale, hall.name)}
             </option>
           ))}
         </select>
         {errors.hall && <p>{errors.hall.message}</p>}
         <label>Slot</label>
-        <select {...register("slot")}>
-          <option disabled selected>
-            Select a slot
-          </option>
-          {slots.map((slot) => (
-            <option key={slot._id} value={slot._id}>
+        <select {...register("slot")} defaultValue={""} required>
+          <option disabled>Select a slot</option>
+          {slots.map((slot, index) => (
+            <option key={index} value={slot._id}>
               {`${slot.start.hour
                 .toString()
                 .padStart(2, "0")}:${slot.start.minute
@@ -98,7 +92,7 @@ export default function CreateLectureForm({
         </select>
         {errors.slot && <p>{errors.slot.message}</p>}
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <button className="btn" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
         </button>
       </form>

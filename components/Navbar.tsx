@@ -54,6 +54,34 @@ export default async function Navbar({ locale }: { locale: "en" | "ar" }) {
             })}
           </Link>
         </Dropdown>
+        <Link href="/semester" className="flex gap-2 items-center">
+          <Calendar />
+          {tt(locale, {
+            en: "Semester",
+            ar: "الفصل الدراسي",
+          })}
+        </Link>
+        <Dropdown
+          label={tt(locale, {
+            en: "Lectures & Sections",
+            ar: "المحاضرات والسكاشن",
+          })}
+        >
+          <Link href="/lectures" className="flex gap-2 items-center">
+            <Calendar />
+            {tt(locale, {
+              en: "Lectures",
+              ar: "المحاضرات",
+            })}
+          </Link>
+          <Link href="/sections" className="flex gap-2 items-center">
+            <Calendar />
+            {tt(locale, {
+              en: "Sections",
+              ar: "السكاشن",
+            })}
+          </Link>
+        </Dropdown>
         <I18nProviderClient locale={locale}>
           <Dropdown label={t("nav.more")}>
             <Link href="/instructors" className="block w-full">

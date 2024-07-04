@@ -32,22 +32,20 @@ export default async function Page({
   const locale = getCurrentLocale();
   const page = getCurrentPage(searchParams);
 
-  const response = await getLectures(page);
-  const lectures = response.lectures;
-  const total = response.totalLectures;
+  const { lectures, total } = await getLectures(page);
+
+  console.log(lectures);
 
   return (
     <>
       <h1>Lectures</h1>
-
       <div>
         {lectures.map((lecture: any) => (
-          <div className='border border-black w-80' key={lecture.id}>
+          <div className="border border-black w-80" key={lecture.id}>
             <p>
               <b>Lecture Hall: </b>
               {tt(locale, lecture.hall.name)}
             </p>
-
             <p>
               <b>Slot: </b>
               {lecture.slot.day}{" "}
@@ -75,7 +73,7 @@ export default async function Page({
         <Pagination totalPages={total / limit} />
       </div>
 
-      <Link href='/lectures/create'> Create Lecture</Link>
+      <Link href="/lectures/create"> Create Lecture</Link>
     </>
   );
 }
