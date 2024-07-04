@@ -50,6 +50,7 @@ export const dummySlotsByDay: Record<DayEnumType, DummySlot[]> = {
 };
 
 export type DummySlot = {
+  _id?: string;
   day: DayEnumType;
   start: {
     hour: number;

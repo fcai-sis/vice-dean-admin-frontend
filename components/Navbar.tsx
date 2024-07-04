@@ -4,10 +4,11 @@ import { getI18n } from "@/locales/server";
 import Link from "next/link";
 import Dropdown from "./Dropdown";
 import ChangeLanguageButton from "./ChangeLanguageButton";
-import { BookStack, Home, Megaphone, PageFlip } from "iconoir-react";
+import { Bank, BookStack, Building, Calendar, Home } from "iconoir-react";
 import Image from "next/image";
+import { tt } from "@/lib";
 
-export default async function Navbar({ locale }: { locale: string }) {
+export default async function Navbar({ locale }: { locale: "en" | "ar" }) {
   const t = await getI18n();
 
   return (
@@ -18,18 +19,41 @@ export default async function Navbar({ locale }: { locale: string }) {
           <Home />
           {t("home.title")}
         </Link>
-        <Link href="/courses/enrolled" className="flex gap-2 items-center">
+        <Link href="/courses" className="flex gap-2 items-center">
           <BookStack />
-          {t("myCourses.title")}
+          {tt(locale, {
+            en: "Courses",
+            ar: "المقررات",
+          })}
         </Link>
-        <Link href="/announcements" className="flex gap-2 items-center">
-          <Megaphone />
-          {t("announcements.title")}
+        <Link href="/departments" className="flex gap-2 items-center">
+          <Bank />
+          {tt(locale, {
+            en: "Departments",
+            ar: "الأقسام",
+          })}
         </Link>
-        <Link href="/requests" className="flex gap-2 items-center">
-          <PageFlip />
-          {t("serviceRequests.title")}
-        </Link>
+        <Dropdown
+          label={tt(locale, {
+            en: "Halls & Slots",
+            ar: "القاعات والفترات",
+          })}
+        >
+          <Link href="/halls" className="flex gap-2 items-center w-full">
+            <Building />
+            {tt(locale, {
+              en: "Halls",
+              ar: "القاعات",
+            })}
+          </Link>
+          <Link href="/slots" className="flex gap-2 items-center w-full">
+            <Calendar />
+            {tt(locale, {
+              en: "Slots",
+              ar: "الفترات",
+            })}
+          </Link>
+        </Dropdown>
         <I18nProviderClient locale={locale}>
           <Dropdown label={t("nav.more")}>
             <Link href="/instructors" className="block w-full">

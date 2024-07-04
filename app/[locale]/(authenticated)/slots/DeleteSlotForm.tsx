@@ -1,31 +1,14 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { z } from "zod";
 import { deleteSlotAction } from "./actions";
-
-const deleteSlotFormSchema = z.object({
-  slotId: z.string(),
-});
-
-export type deleteSlotFormValues = z.infer<typeof deleteSlotFormSchema>;
+import { Trash } from "iconoir-react";
 
 export default function DeleteSlotForm({ slotId }: { slotId: string }) {
   const router = useRouter();
-  const {
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<deleteSlotFormValues>({
-    resolver: zodResolver(deleteSlotFormSchema),
-    defaultValues: {
-      slotId: slotId,
-    },
-  });
 
-  const onSubmit = async (values: deleteSlotFormValues) => {
-    const deleteSlotResponse = await deleteSlotAction(values);
+  const onSubmit = async () => {
+    const deleteSlotResponse = await deleteSlotAction({ slotId });
 
     if (!deleteSlotResponse.success) {
       return toast.error(deleteSlotResponse.error?.message);
@@ -37,12 +20,14 @@ export default function DeleteSlotForm({ slotId }: { slotId: string }) {
 
   return (
     <>
-      <h2>Delete Slot</h2>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <button className='btn' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Deleting..." : "Delete"}
-        </button>
-      </form>
+      <div
+        className="rounded-lg table-cell p-2 bg-red-50 border border-red-100 cursor-pointer hover:bg-red-100 transition-colors duration-300 [&_*]:stroke-red-500"
+        onClick={onSubmit}
+      >
+        <p className="flex justify-center items-center">
+          <Trash />
+        </p>
+      </div>
     </>
   );
 }

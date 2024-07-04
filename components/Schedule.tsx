@@ -4,6 +4,11 @@ import { tt } from "@/lib";
 import { DayEnumType, dayLocalizedEnum } from "@fcai-sis/shared-models";
 import { getCurrentLocale } from "@/locales/server";
 import { DummyHall } from "@/dummy/halls";
+import { Plus } from "iconoir-react";
+import CreateSlotForm, {
+  CreateNewTimeRangeSlotForm,
+} from "@/app/[locale]/(authenticated)/slots/create/CreateSlotForm";
+import DeleteSlotForm from "@/app/[locale]/(authenticated)/slots/DeleteSlotForm";
 
 /**
  * e.g.
@@ -15,7 +20,7 @@ import { DummyHall } from "@/dummy/halls";
  * @param slot - The slot to format its time
  * @returns 7:00 PM - 8:30 PM
  */
-function formatSlotTime(slot: DummySlot) {
+function formatSlotTime(slot: any) {
   const startTimeAmPm = slot.start.hour >= 12 ? "PM" : "AM";
   const endTimeAmPm = slot.end.hour >= 12 ? "PM" : "AM";
   const startTimeHour = slot.start.hour % 12 || 12;
@@ -40,6 +45,7 @@ function isSameSlot(slot1: DummySlot, slot2: DummySlot): boolean {
 
 export type ScheduleProps = {
   slots: Record<DayEnumType, DummySlot[]>;
+  days: { day: DayEnumType }[];
   timeRanges: {
     day: undefined;
     start: {
@@ -55,6 +61,7 @@ export type ScheduleProps = {
 };
 
 export default function Schedule({
+  days,
   timeRanges,
   slots,
   schedule,
@@ -67,7 +74,7 @@ export default function Schedule({
           <div className="table-cell p-2"></div>
           {timeRanges.map((timeRange) => (
             <div
-              className="table-cell rounded-lg p-2 bg-white border border-slate-200 text-center"
+              className="table-cell rounded-lg p-2 bg-slate-50 border border-slate-200 text-center"
               key={JSON.stringify(timeRange)}
             >
               <p dir="ltr">
@@ -79,47 +86,42 @@ export default function Schedule({
       </div>
       {Object.keys(slots).map((currentDay) => (
         <div className="table-row" key={currentDay}>
-          <div className="table-cell rounded-lg p-2 bg-white border border-slate-200">
+          <div className="table-cell rounded-lg p-2 bg-slate-50 border border-slate-200">
             {tt(locale, dayLocalizedEnum[currentDay as DayEnumType])}
           </div>
-          {slots[currentDay as DayEnumType].map((currentTimeRange) => (
+          {timeRanges.map((currentTimeRange, index) => (
             <>
               {(() => {
-                // find all items that have the same slot and check if they are lectures or sections
-                const items = schedule.filter((item) =>
-                  isSameSlot(item.slot, currentTimeRange as DummySlot)
+                // if slot with current day and time range exists display it
+                const exisitingSlot = slots[currentDay as DayEnumType].find(
+                  (slot) =>
+                    isSameSlot(slot, {
+                      day: currentDay as DayEnumType,
+                      start: currentTimeRange.start,
+                      end: currentTimeRange.end,
+                    })
                 );
+                // else display empty slot that is clickable to add a new slot
 
-                if (items.length === 0)
+                if (exisitingSlot) {
                   return (
-                    <div className="table-cell bg-slate-100 rounded-lg"></div>
+                    <DeleteSlotForm slotId={exisitingSlot._id!} key={index} />
                   );
-
-                // map each item to a form based on its type
-                return items.map((item, index) => {
-                  if (item.type === "lecture") {
-                    return (
-                      <LectureSlot
-                        key={index}
-                        lecture={item.lecture}
-                        hall={item.hall}
-                      />
-                    );
-                  } else if (item.type === "section") {
-                    return (
-                      <SectionSlot
-                        key={index}
-                        section={item.secion}
-                        hall={item.hall}
-                      />
-                    );
-                  } else {
-                    return "Invalid type";
-                  }
-                });
+                } else {
+                  return (
+                    <CreateSlotForm
+                      start={currentTimeRange.start}
+                      end={currentTimeRange.end}
+                      day={currentDay as DayEnumType}
+                      key={index}
+                    />
+                  );
+                }
               })()}
             </>
           ))}
+
+          <CreateNewTimeRangeSlotForm day={currentDay as DayEnumType} />
         </div>
       ))}
     </div>

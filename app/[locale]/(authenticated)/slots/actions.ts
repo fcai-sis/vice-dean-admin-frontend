@@ -2,10 +2,8 @@
 import { getAccessToken } from "@/lib";
 import { hallSlotAPI } from "@/api";
 import { revalidatePath } from "next/cache";
-import { CreateSlotFormValues } from "./create/CreateSlotForm";
-import { deleteSlotFormValues } from "./DeleteSlotForm";
 
-export const createSlotAction = async (data: CreateSlotFormValues) => {
+export const createSlotAction = async (data: any) => {
   const accessToken = await getAccessToken();
 
   const requestBody = {
@@ -38,13 +36,13 @@ export const createSlotAction = async (data: CreateSlotFormValues) => {
   return { success: true };
 };
 
-export const deleteSlotAction = async (data: deleteSlotFormValues) => {
+export const deleteSlotAction = async (data: any) => {
   const accessToken = await getAccessToken();
 
-  const hallId = data.slotId;
-  console.log(hallId);
+  const slotId = data.slotId;
+  console.log(slotId);
 
-  const response = await hallSlotAPI.delete(`/slot/slots/${hallId}`, {
+  const response = await hallSlotAPI.delete(`/slot/${slotId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
