@@ -39,7 +39,7 @@ export const getHalls = async () => {
 export const getSlots = async () => {
   const accessToken = await getAccessToken();
 
-  const response = await hallSlotAPI.get(`/slot/slots`, {
+  const response = await hallSlotAPI.get(`/slot`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
