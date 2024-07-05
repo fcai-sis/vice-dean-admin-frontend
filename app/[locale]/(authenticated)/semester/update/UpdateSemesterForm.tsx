@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { useState } from "react";
 import { updateSemesterAction } from "../actions";
+import { Button } from "@/components/Buttons";
 
 const updateSemesterFormSchema = z.object({
   semesterId: z.string(),
@@ -66,7 +67,10 @@ export default function UpdateSemesterForm({
     const updateSemesterResponse = await updateSemesterAction(values);
 
     if (!updateSemesterResponse.success) {
-      return toast.error(updateSemesterResponse.error?.message);
+      for (const error of updateSemesterResponse.errors) {
+        toast.error(error.message);
+      }
+      return;
     }
 
     toast.success("Semester updated successfully!");
@@ -79,10 +83,10 @@ export default function UpdateSemesterForm({
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <select {...register("season")} defaultValue={semester.season}>
-          <option value='FALL'>Fall</option>
-          <option value='SPRING'>Spring</option>
-          <option value='SUMMER'>Summer</option>
-          <option value='WINTER'>Winter</option>
+          <option value="FALL">Fall</option>
+          <option value="SPRING">Spring</option>
+          <option value="SUMMER">Summer</option>
+          <option value="WINTER">Winter</option>
         </select>
         {errors.season && <span>{errors.season.message}</span>}
 
@@ -93,7 +97,7 @@ export default function UpdateSemesterForm({
               defaultValue={field.course}
               onChange={(e) => handleCourseChange(index, e.target.value)}
             >
-              <option value='' disabled>
+              <option value="" disabled>
                 Select a course
               </option>
               {courses
@@ -111,8 +115,7 @@ export default function UpdateSemesterForm({
             {errors.courses && errors.courses[index] && (
               <span>{errors.courses[index]?.message}</span>
             )}
-            <button
-              type='button'
+            <Button
               onClick={() => {
                 removeCourse(index);
                 const newSelectedCourses = [...selectedCourses];
@@ -124,11 +127,8 @@ export default function UpdateSemesterForm({
             </Button>
           </div>
         ))}
-        <button type='button' onClick={() => addCourse({ course: "" })}>
-          Add Course
-        </Button>
-
-        <Button type='submit' disabled={isSubmitting}>
+        <Button onClick={() => addCourse({ course: "" })}>Add Course</Button>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
         </Button>
       </form>

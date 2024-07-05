@@ -58,9 +58,7 @@ export const updateSemesterAction = async (data: UpdateSemesterFormValues) => {
   if (response.status !== 200) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 
@@ -81,9 +79,7 @@ export const endSemesterAction = async () => {
   if (response.status !== 200) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 
@@ -104,9 +100,7 @@ export const departmentAssignmentAction = async () => {
   if (response.status !== 200) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 

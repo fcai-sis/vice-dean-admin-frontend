@@ -8,6 +8,7 @@ import { createHallAction } from "../actions";
 import { Button } from "@/components/Buttons";
 import { tt } from "@/lib";
 import { useCurrentLocale } from "@/locales/client";
+import { PageHeader } from "@/components/PageBuilder";
 
 const createHallFormSchema = z.object({
   name: z.object({
@@ -47,20 +48,22 @@ export default function CreateHallForm() {
 
   return (
     <>
+      <PageHeader
+        title={tt(locale, {
+          en: "Create Hall",
+          ar: "إنشاء قاعة",
+        })}
+        actions={[]}
+      />
+
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="rounded-lg border border-slate-200 bg-white flex flex-col p-4 gap-4"
+        className="rounded-lg border border-slate-200 bg-white flex flex-col p-4 gap-4 w-full"
       >
-        <h1>
-          {tt(locale, {
-            en: "Create Hall",
-            ar: "إنشاء قاعة",
-          })}
-        </h1>
         <label>
           {tt(locale, {
-            en: "Name",
-            ar: "الاسم",
+            en: "Name (English)",
+            ar: "الاسم (الانجليزي)",
           })}
         </label>
         <input
@@ -72,6 +75,12 @@ export default function CreateHallForm() {
           {...register("name.en")}
         />
         {errors.name?.en && <p>{errors.name.en.message}</p>}
+        <label>
+          {tt(locale, {
+            en: "Name (Arabic)",
+            ar: "الاسم (العربي)",
+          })}
+        </label>
         <input
           type="text"
           placeholder={tt(locale, {

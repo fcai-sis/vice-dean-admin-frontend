@@ -14,6 +14,7 @@ export const getLatestSemester = async () => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+
   console.log(response.data);
 
   if (response.status !== 200) redirect("/semester/create");
@@ -26,9 +27,7 @@ export const getLatestSemester = async () => {
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string } }>) {
-  const response = await getLatestSemester();
-  const semester = response.semester;
-  const semestercourses = response.courses;
+  const { semester, courses } = await getLatestSemester();
 
   return (
     <>
@@ -40,7 +39,7 @@ export default async function Page({
           {semester.season}
         </h2>
 
-        {semestercourses.map((course: any) => (
+        {courses.map((course: any) => (
           <div className="border border-black w-80" key={course.id}>
             <p>
               <b>Course: </b>

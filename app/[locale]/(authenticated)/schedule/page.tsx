@@ -76,6 +76,8 @@ import {
   DayEnumType,
   dayLocalizedEnum,
   HallModel,
+  SemesterCourseModel,
+  SemesterModel,
 } from "@fcai-sis/shared-models";
 import { DummyHall } from "@/dummy/halls";
 import { getSlots } from "../slots/page";
@@ -188,8 +190,13 @@ export async function EntireSchedule({
                 );
 
                 if (lectuesAndSectionsInThatDayAndTimeRange.length === 0) {
-                  const [courses, halls] = await Promise.all([
-                    CourseModel.find(),
+                  const latestSemester = await SemesterModel.findOne().sort({
+                    createdAt: -1,
+                  });
+                  const [semesterCourses, halls] = await Promise.all([
+                    SemesterCourseModel.find({
+                      semester: latestSemester._id,
+                    }).populate("course"),
                     HallModel.find(),
                   ]);
 
@@ -207,7 +214,10 @@ export async function EntireSchedule({
                       key={index}
                     >
                       <CreateLectureOrSectionForm
-                        courses={courses.map((course) => course.toJSON())}
+                        courses={semesterCourses.map((sc) => ({
+                          name: sc.course.name,
+                          code: sc.course.code,
+                        }))}
                         halls={halls.map((hall) => hall.toJSON())}
                         slot={currentSlot._id!}
                       />
@@ -242,12 +252,32 @@ export async function EntireSchedule({
                               item.section?.course.code
                           );
 
+                        const latestSemester =
+                          await SemesterModel.findOne().sort({
+                            createdAt: -1,
+                          });
                         const [courses, halls] = await Promise.all([
-                          CourseModel.find({
-                            code: {
-                              $nin: cantCourses,
+                          SemesterCourseModel.aggregate([
+                            {
+                              $match: {
+                                semester: latestSemester._id,
+                              },
                             },
-                          }),
+                            {
+                              $lookup: {
+                                from: CourseModel.collection.name,
+                                localField: "course",
+                                foreignField: "_id",
+                                as: "course",
+                              },
+                            },
+                            {
+                              $unwind: {
+                                path: "$course",
+                                preserveNullAndEmptyArrays: true,
+                              },
+                            },
+                          ]),
                           HallModel.find({
                             _id: {
                               $nin: lectuesAndSectionsInThatDayAndTimeRange.map(
@@ -267,7 +297,15 @@ export async function EntireSchedule({
 
                         return (
                           <CreateLectureOrSectionForm
-                            courses={courses.map((course) => course.toJSON())}
+                            courses={courses
+                              .filter(
+                                (course) =>
+                                  !cantCourses.includes(course.course.code)
+                              )
+                              .map((course) => ({
+                                name: course.course.name,
+                                code: course.course.code,
+                              }))}
                             halls={halls.map((hall) => hall.toJSON())}
                             slot={currentSlot._id!}
                           />
