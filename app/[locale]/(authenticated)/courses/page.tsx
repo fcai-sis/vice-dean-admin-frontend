@@ -10,7 +10,6 @@ import { getCurrentLocale } from "@/locales/server";
 import { ButtonLink } from "@/components/Buttons";
 import Card from "@/components/Card";
 import { DepartmentChip } from "@/components/AnnouncementCard";
-import { EditPencil } from "iconoir-react";
 import { CodeChip } from "../departments/page";
 
 export const getCourses = async (page: number, department: DepartmentType) => {

@@ -1,9 +1,8 @@
-import { hallsAPI, hallSlotAPI } from "@/api";
+import { hallsAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
 import { getCurrentLocale } from "@/locales/server";
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
 import DeleteHallForm from "./DeleteHallForm";
 import { CardGrid, PageHeader } from "@/components/PageBuilder";
 import { ButtonLink } from "@/components/Buttons";

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { getAccessToken } from "@/lib";
 import { coursesAPI } from "@/api";
 import { revalidatePath } from "next/cache";

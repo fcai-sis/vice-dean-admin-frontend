@@ -1,4 +1,5 @@
 "use server";
+
 import { getAccessToken } from "@/lib";
 import { CreateSemesterFormValues } from "./create/CreateSemesterForm";
 import { departmentEnrollmentAPI, semesterAPI } from "@/api";

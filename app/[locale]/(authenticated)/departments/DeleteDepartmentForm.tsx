@@ -1,4 +1,5 @@
 "use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -9,7 +10,6 @@ import { Button } from "@/components/Buttons";
 import Spinner from "@/components/Spinner";
 import { tt } from "@/lib";
 import { useCurrentLocale } from "@/locales/client";
-import { Trash } from "iconoir-react";
 
 const deleteDepartmentFormSchema = z.object({
   code: z.string(),

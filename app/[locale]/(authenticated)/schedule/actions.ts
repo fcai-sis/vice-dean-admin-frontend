@@ -1,4 +1,5 @@
 "use server";
+
 import { getAccessToken } from "@/lib";
 import { scheduleAPI } from "@/api";
 import { revalidatePath } from "next/cache";

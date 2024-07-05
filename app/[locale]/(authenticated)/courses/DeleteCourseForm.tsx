@@ -8,7 +8,6 @@ import { Button } from "@/components/Buttons";
 import { tt } from "@/lib";
 import { useCurrentLocale } from "@/locales/client";
 import Spinner from "@/components/Spinner";
-import { Trash } from "iconoir-react";
 import { deleteCourseAction } from "./actions";
 
 const deleteCourseFormSchema = z.object({

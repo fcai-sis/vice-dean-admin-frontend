@@ -1,4 +1,3 @@
-import Link from "next/link";
 import CreateSemesterForm from "./CreateSemesterForm";
 import { getAccessToken } from "@/lib";
 import { coursesAPI } from "@/api";

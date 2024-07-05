@@ -1,5 +1,5 @@
 import { scheduleAPI } from "@/api";
-import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
+import { getAccessToken, limit, tt } from "@/lib";
 import { getCurrentLocale } from "@/locales/server";
 import { revalidatePath } from "next/cache";
 import { PageHeader } from "@/components/PageBuilder";

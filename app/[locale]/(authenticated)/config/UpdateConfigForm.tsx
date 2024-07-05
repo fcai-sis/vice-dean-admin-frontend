@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { updateConfigAction } from "./actions";
+import { Button } from "@/components/Buttons";
 
 const updateConfigFormSchema = z.object({
   isCourseEnrollOpen: z.boolean().optional(),
