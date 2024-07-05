@@ -3,7 +3,6 @@ import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
 import { getCurrentLocale } from "@/locales/server";
 import { revalidatePath } from "next/cache";
 import { PageHeader } from "@/components/PageBuilder";
-import { ButtonLink } from "@/components/Buttons";
 
 export const getLectures = async (page: number) => {
   const accessToken = await getAccessToken();
@@ -45,15 +44,11 @@ export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string } }>) {
   const locale = getCurrentLocale();
-  const page = getCurrentPage(searchParams);
 
   const { slots, timeRanges, days } = await getSlots();
   const { schedule } = await getEntireSchedule();
 
   console.log("schedule", schedule);
-  console.log("slots", slots);
-  console.log("timeRanges", timeRanges);
-  console.log("days", days);
 
   return (
     <>
@@ -84,7 +79,9 @@ import {
 } from "@fcai-sis/shared-models";
 import { DummyHall } from "@/dummy/halls";
 import { getSlots } from "../slots/page";
-import CreateLectureOrSectionForm from "./create/CreateLectureForm";
+import CreateLectureOrSectionForm from "./CreateLectureForm";
+import DeleteLectureForm from "./DeleteLectureForm";
+import DeleteSectionForm from "./DeleteSectionForm";
 
 /**
  * e.g.
@@ -206,7 +203,7 @@ export async function EntireSchedule({
 
                   return (
                     <div
-                      className="table-cell bg-slate-100 rounded-lg"
+                      className="table-cell bg-slate-100 rounded-lg content-center"
                       key={index}
                     >
                       <CreateLectureOrSectionForm
@@ -227,21 +224,9 @@ export async function EntireSchedule({
                     {lectuesAndSectionsInThatDayAndTimeRange.map(
                       (item, index) => {
                         if (item.type === "lecture") {
-                          return (
-                            <LectureSlot
-                              key={index}
-                              lecture={item.lecture}
-                              hall={item.hall}
-                            />
-                          );
+                          return <LectureSlot key={index} item={item} />;
                         } else if (item.type === "section") {
-                          return (
-                            <SectionSlot
-                              key={index}
-                              section={item.section}
-                              hall={item.hall}
-                            />
-                          );
+                          return <SectionSlot key={index} item={item} />;
                         } else {
                           return "Invalid type";
                         }
@@ -256,7 +241,6 @@ export async function EntireSchedule({
                               item.lecture?.course.code ||
                               item.section?.course.code
                           );
-                        console.log("cantCourses", cantCourses);
 
                         const [courses, halls] = await Promise.all([
                           CourseModel.find({
@@ -302,11 +286,11 @@ export async function EntireSchedule({
 }
 
 type LectureSlotProps = Readonly<{
-  lecture: DummyLecture;
-  hall: DummyHall;
+  item: any;
 }>;
-function LectureSlot({ lecture, hall }: LectureSlotProps) {
+function LectureSlot({ item }: LectureSlotProps) {
   const locale = getCurrentLocale();
+  const { lecture, hall } = item;
   return (
     <div className="p-2 m-1 rounded-lg bg-white border border-slate-200">
       <p>
@@ -322,17 +306,17 @@ function LectureSlot({ lecture, hall }: LectureSlotProps) {
           {tt(locale, hall.name)}
         </small>
       </p>
+      <DeleteLectureForm lectureId={item._id} />
     </div>
   );
 }
 
 type SectionSlotProps = Readonly<{
-  section: DummySection;
-  hall: DummyHall;
+  item: any;
 }>;
-function SectionSlot({ section, hall }: SectionSlotProps) {
+function SectionSlot({ item }: SectionSlotProps) {
   const locale = getCurrentLocale();
-  console.log("THE SECTION", section);
+  const { hall, section } = item;
 
   return (
     <div className="p-2 m-1 rounded-lg bg-white border border-slate-200">
@@ -352,6 +336,7 @@ function SectionSlot({ section, hall }: SectionSlotProps) {
           {section.group}
         </small>
       </p>
+      <DeleteSectionForm sectionId={item._id} />
     </div>
   );
 }

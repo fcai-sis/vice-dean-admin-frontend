@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { deleteLectureAction } from "./actions";
 import { Button } from "@/components/Buttons";
+import { useCurrentLocale } from "@/locales/client";
+import { tt } from "@/lib";
 
 const deleteLectureFormSchema = z.object({
   lectureId: z.string(),
@@ -18,6 +20,7 @@ export default function DeleteLectureForm({
 }: {
   lectureId: string;
 }) {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -36,15 +39,26 @@ export default function DeleteLectureForm({
       return toast.error(deleteLectureResponse.error?.message);
     }
 
-    toast.success("Lecture deleted");
-    router.push(`/lectures`);
+    toast.success(
+      tt(locale, {
+        en: "Lecture deleted successfully",
+        ar: "تم حذف المحاضرة بنجاح",
+      })
+    );
+    router.push(`/schedule`);
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full flex justify-end gap-2 "
+      >
         <Button variant="danger" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Deleting..." : "Delete"}
+          {tt(locale, {
+            en: "Delete",
+            ar: "حذف",
+          })}
         </Button>
       </form>
     </>

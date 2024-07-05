@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { deleteSectionAction } from "./actions";
+import { Button } from "@/components/Buttons";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
 
 const deleteSectionFormSchema = z.object({
   sectionId: z.string(),
@@ -17,6 +20,7 @@ export default function DeleteSectionForm({
 }: {
   sectionId: string;
 }) {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -35,15 +39,26 @@ export default function DeleteSectionForm({
       return toast.error(deleteSectionResponse.error?.message);
     }
 
-    toast.success("Section deleted");
-    router.push(`/sections`);
+    toast.success(
+      tt(locale, {
+        en: "Section deleted successfully",
+        ar: "تم حذف القسم بنجاح",
+      })
+    );
+    router.push(`/schedule`);
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Deleting..." : "Delete"}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full flex justify-end gap-2"
+      >
+        <Button variant="danger" type="submit" disabled={isSubmitting}>
+          {tt(locale, {
+            en: "Delete",
+            ar: "حذف",
+          })}
         </Button>
       </form>
     </>

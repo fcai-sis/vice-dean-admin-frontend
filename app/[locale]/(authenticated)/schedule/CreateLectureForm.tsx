@@ -83,9 +83,9 @@ export default function CreateLectureOrSectionForm({
 
   return (
     <>
-      <div className="table-cell w-full">
+      <div className="p-2 w-full flex justify-center items-center">
         <Button
-          className="w-full bg-blue-100 text-blue-500 [&_*]:stroke-blue-500 hover:bg-blue-200 text-center align-middle"
+          className="bg-blue-100 text-blue-500 [&_*]:stroke-blue-500 hover:bg-blue-200 text-center align-middle"
           onClick={() => setShowModal(true)}
         >
           <Plus />
@@ -103,7 +103,12 @@ export default function CreateLectureOrSectionForm({
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col [&_*]:text-sm bg-white p-4 gap-4 rounded-lg w-min absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
         >
-          <label htmlFor="type">Type:</label>
+          <label htmlFor="type">
+            {tt(locale, {
+              en: "Lecture or Section?",
+              ar: "محاضرة أم سكشن؟",
+            })}
+          </label>
           <select
             id="type"
             {...register("type")}
@@ -123,7 +128,12 @@ export default function CreateLectureOrSectionForm({
             </option>
           </select>
 
-          <label htmlFor="course">Course:</label>
+          <label htmlFor="course">
+            {tt(locale, {
+              en: "Course",
+              ar: "المقرر",
+            })}
+          </label>
           <select
             {...register("course")}
             className="rounded-lg border border-slate-200 p-2"
@@ -134,7 +144,12 @@ export default function CreateLectureOrSectionForm({
               </option>
             ))}
           </select>
-          <label htmlFor="hall">Hall:</label>
+          <label htmlFor="hall">
+            {tt(locale, {
+              en: "Hall",
+              ar: "القاعة",
+            })}
+          </label>
           <select
             {...register("hall")}
             className="rounded-lg border border-slate-200 p-2"
@@ -147,7 +162,12 @@ export default function CreateLectureOrSectionForm({
           </select>
           {lectureOrSection == "section" && (
             <>
-              <label htmlFor="group">Group:</label>
+              <label htmlFor="group">
+                {tt(locale, {
+                  en: "Group",
+                  ar: "المجموعة",
+                })}
+              </label>
               <input
                 type="text"
                 {...register("group")}
