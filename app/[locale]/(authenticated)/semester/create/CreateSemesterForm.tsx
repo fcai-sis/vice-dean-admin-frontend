@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { createSemesterAction } from "../actions";
 import { useState } from "react";
+import { Button } from "@/components/Buttons";
 
 const createSemesterFormSchema = z.object({
   season: z.enum(["FALL", "SPRING", "SUMMER", "WINTER"]),
@@ -65,10 +66,10 @@ export default function CreateSemesterForm({ courses }: { courses: any[] }) {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <select {...register("season")}>
-          <option value='FALL'>Fall</option>
-          <option value='SPRING'>Spring</option>
-          <option value='SUMMER'>Summer</option>
-          <option value='WINTER'>Winter</option>
+          <option value="FALL">Fall</option>
+          <option value="SPRING">Spring</option>
+          <option value="SUMMER">Summer</option>
+          <option value="WINTER">Winter</option>
         </select>
         {errors.season && <span>{errors.season.message}</span>}
 
@@ -79,7 +80,7 @@ export default function CreateSemesterForm({ courses }: { courses: any[] }) {
               defaultValue={field.course}
               onChange={(e) => handleCourseChange(index, e.target.value)}
             >
-              <option value='' disabled>
+              <option value="" disabled>
                 Select a course
               </option>
               {courses
@@ -97,8 +98,8 @@ export default function CreateSemesterForm({ courses }: { courses: any[] }) {
             {errors.courses && errors.courses[index] && (
               <span>{errors.courses[index]?.message}</span>
             )}
-            <button
-              type='button'
+            <Button
+              type="button"
               onClick={() => {
                 removeCourse(index);
                 const newSelectedCourses = [...selectedCourses];
@@ -107,16 +108,16 @@ export default function CreateSemesterForm({ courses }: { courses: any[] }) {
               }}
             >
               Remove Course
-            </button>
+            </Button>
           </div>
         ))}
-        <button type='button' onClick={() => addCourse({ course: "" })}>
+        <Button type="button" onClick={() => addCourse({ course: "" })}>
           Add Course
-        </button>
+        </Button>
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        </Button>
       </form>
     </>
   );

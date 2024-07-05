@@ -29,9 +29,7 @@ export const createInstructorTeachingAction = async (
   if (response.status !== 201) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 
@@ -61,9 +59,7 @@ export const deleteInstructorTeachingAction = async (
   if (response.status !== 200) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 

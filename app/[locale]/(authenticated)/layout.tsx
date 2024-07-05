@@ -1,18 +1,20 @@
 import Navbar from "@/components/Navbar";
-import { ensureAuthenticated } from "@/lib";
+import { ensureAuthenticated, SupportedLocale } from "@/lib";
 
 export default async function Layout({
   children,
   params: { locale },
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: SupportedLocale };
 }>) {
   await ensureAuthenticated();
   return (
     <>
       <Navbar locale={locale} />
-      <div className="py-28 px-16">{children}</div>
+      <div className="w-full h-full flex flex-col items-center justify-start p-32">
+        {children}
+      </div>
     </>
   );
 }

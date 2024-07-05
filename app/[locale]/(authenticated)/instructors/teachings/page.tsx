@@ -17,7 +17,7 @@ export const getAllInstructorTeachings = async (
       Authorization: `Bearer ${accessToken}`,
     },
     params: {
-      skip: page * limit - limit,
+      page,
       limit,
       department,
     },
@@ -77,10 +77,10 @@ export default async function Page({
     <>
       <div>
         <h1>Instructor Teachings Available</h1>
-        <SelectFilter name='department' options={departmentOptions} />
+        <SelectFilter name="department" options={departmentOptions} />
         <div>
           {instructorTeachings.map((teaching: any) => (
-            <div className='border border-black w-80'>
+            <div className="border border-black w-80">
               <p>
                 <b>Name: </b>
                 {teaching.instructor.fullName}
@@ -112,7 +112,7 @@ export default async function Page({
           ))}
           <Pagination totalPages={total / limit} />
         </div>
-        <Link href='/instructors/teachings/create'>
+        <Link href="/instructors/teachings/create">
           Create Instructor Teaching
         </Link>
       </div>

@@ -42,9 +42,9 @@ export default function DeleteSectionForm({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Deleting..." : "Delete"}
-        </button>
+        </Button>
       </form>
     </>
   );

@@ -5,7 +5,8 @@ import { createSlotAction } from "../actions";
 import { Plus } from "iconoir-react";
 import { tt } from "@/lib";
 import { useCurrentLocale } from "@/locales/client";
-import { useEffect, useState } from "react";
+import { Component, ComponentProps, useEffect, useState } from "react";
+import { Button } from "@/components/Buttons";
 
 const DayEnum = [
   "SUNDAY",
@@ -41,8 +42,6 @@ export function CreateNewTimeRangeSlotForm({ day }: { day: DayEnumType }) {
   const [end, setEnd] = useState<string>(`${new Date().getHours() + 1}:00`);
 
   const onSubmit = async () => {
-    console.log("clicked");
-
     const starthour = start.split(":")[0];
     const startminute = start.split(":")[1];
     const endhour = end.split(":")[0];
@@ -77,10 +76,6 @@ export function CreateNewTimeRangeSlotForm({ day }: { day: DayEnumType }) {
     router.push(`/slots`);
   };
 
-  const color = showForm
-    ? "bg-white border border-slate-200"
-    : "bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors duration-300";
-
   useEffect(() => {
     const s = start;
 
@@ -88,72 +83,116 @@ export function CreateNewTimeRangeSlotForm({ day }: { day: DayEnumType }) {
   }, [start]);
 
   return (
-    <div
-      className={`rounded-lg table-cell p-2 ${color}`}
-      onClick={(e) => {
-        console.log("clicked");
-        setShowForm(true);
-      }}
-    >
-      {showForm ? (
-        <div className="flex flex-col [&_*]:text-sm ">
-          <div className="flex gap-2 items-center">
-            <label htmlFor="start">
-              {tt(locale, {
-                en: "Start",
-                ar: "البداية",
-              })}
-            </label>
-            <input
-              type="time"
-              value={start}
-              className="p-2 border border-gray-300 rounded-lg"
-              onChange={(e) => {
-                setStart(e.target.value);
-              }}
-            />
-            <label htmlFor="end">
-              {tt(locale, {
-                en: "End",
-                ar: "النهاية",
-              })}
-            </label>
-            <input
-              type="time"
-              value={end}
-              className="p-2 border border-gray-300 rounded-lg"
-              onChange={(e) => {
-                setEnd(e.target.value);
-              }}
-            />
+    <NewTimeRangeForm
+      day={day}
+      start={start}
+      end={end}
+      setStart={setStart}
+      setEnd={setEnd}
+      showForm={showForm}
+      setShowForm={setShowForm}
+      onSubmit={onSubmit}
+    />
+  );
+}
 
-            <button
-              className="bg-blue-500 rounded-lg text-white px-2 py-2"
-              onClick={onSubmit}
-            >
-              Submit
-            </button>
-            <button
-              className="bg-red-500 rounded-lg text-white px-2 py-2"
+function NewTimeRangeForm({
+  day,
+  start,
+  end,
+  setStart,
+  setEnd,
+  showForm,
+  setShowForm,
+  onSubmit,
+}: {
+  day: DayEnumType;
+  start: string;
+  end: string;
+  setStart: (start: string) => void;
+  setEnd: (end: string) => void;
+  showForm: boolean;
+  setShowForm: (showForm: boolean) => void;
+  onSubmit: () => void;
+}) {
+  const locale = useCurrentLocale();
+  return (
+    <>
+      <CreateWithNewTimeRangeSlotForm
+        day={day}
+        onClick={(e) => {
+          setShowForm(true);
+        }}
+      />
+
+      <div
+        className="z-50 w-full h-full fixed top-0 left-0 bg-black bg-opacity-65"
+        style={{ display: showForm ? "block" : "none" }}
+      >
+        <div className="flex flex-col [&_*]:text-sm bg-white p-4 gap-4 rounded-lg w-min absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <label htmlFor="start">
+            {tt(locale, {
+              en: "Start",
+              ar: "البداية",
+            })}
+          </label>
+          <input
+            type="time"
+            value={start}
+            className="p-2 border border-gray-300 rounded-lg"
+            onChange={(e) => {
+              setStart(e.target.value);
+            }}
+          />
+          <label htmlFor="end">
+            {tt(locale, {
+              en: "End",
+              ar: "النهاية",
+            })}
+          </label>
+          <input
+            type="time"
+            value={end}
+            className="p-2 border border-gray-300 rounded-lg"
+            onChange={(e) => {
+              setEnd(e.target.value);
+            }}
+          />
+          <div className="flex gap-2 items-center">
+            <Button onClick={onSubmit}>Submit</Button>
+            <Button
               onClick={(e) => {
                 console.log("canceled");
-                e.stopPropagation();
                 setShowForm(false);
               }}
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
-      ) : (
-        <p className="text-center text-sm flex items-center justify-center gap-2 text-blue-500">
-          <Plus className="[&_*]:stroke-blue-500" />
-          {tt(locale, {
-            en: "Create with new time slot",
-            ar: "إنشاء بفترة زمنية جديدة",
-          })}
-        </p>
-      )}
+      </div>
+    </>
+  );
+}
+
+function CreateWithNewTimeRangeSlotForm(
+  props: { day: DayEnumType } & ComponentProps<"div">
+) {
+  const locale = useCurrentLocale();
+  return (
+    <div
+      className={
+        "rounded-lg table-cell p-2 bg-blue-50 cursor-pointer hover:bg-blue-100 transition-colors duration-300"
+      }
+      onClick={props.onClick}
+    >
+      <p className="text-center text-sm flex items-center justify-center gap-2 text-blue-500">
+        <Plus className="[&_*]:stroke-blue-500" />
+        {tt(locale, {
+          en: "Create with new time slot",
+          ar: "إنشاء بفترة زمنية جديدة",
+        })}
+      </p>
     </div>
   );
 }
@@ -188,65 +227,4 @@ export default function CreateSlotForm({
       </p>
     </div>
   );
-
-  // return (
-  //   <>
-  //     <h1>Create Slot</h1>
-
-  //     <form onSubmit={handleSubmit(onSubmit)}>
-  //       <div>
-  //         <label>Start Hour</label>
-  //         <input
-  //           type="number"
-  //           {...register("start.hour", { valueAsNumber: true })}
-  //         />
-  //         {errors.start?.hour && <p>{errors.start.hour.message}</p>}
-  //       </div>
-
-  //       <div>
-  //         <label>Start Minute</label>
-  //         <input
-  //           type="number"
-  //           {...register("start.minute", { valueAsNumber: true })}
-  //         />
-  //         {errors.start?.minute && <p>{errors.start.minute.message}</p>}
-  //       </div>
-
-  //       <div>
-  //         <label>End Hour</label>
-  //         <input
-  //           type="number"
-  //           {...register("end.hour", { valueAsNumber: true })}
-  //         />
-  //         {errors.end?.hour && <p>{errors.end.hour.message}</p>}
-  //       </div>
-
-  //       <div>
-  //         <label>End Minute</label>
-  //         <input
-  //           type="number"
-  //           {...register("end.minute", { valueAsNumber: true })}
-  //         />
-  //         {errors.end?.minute && <p>{errors.end.minute.message}</p>}
-  //       </div>
-  //       <div>
-  //         <label>Day</label>
-  //         <select {...register("day")}>
-  //           <option value="SUNDAY">Sunday</option>
-  //           <option value="MONDAY">Monday</option>
-  //           <option value="TUESDAY">Tuesday</option>
-  //           <option value="WEDNESDAY">Wednesday</option>
-  //           <option value="THURSDAY">Thursday</option>
-  //           <option value="FRIDAY">Friday</option>
-  //           <option value="SATURDAY">Saturday</option>
-  //         </select>
-  //         {errors.day && <p>{errors.day.message}</p>}
-  //       </div>
-
-  //       <button className="btn" type="submit" disabled={isSubmitting}>
-  //         {isSubmitting ? "Submitting" : "Submit"}
-  //       </button>
-  //     </form>
-  //   </>
-  // );
 }

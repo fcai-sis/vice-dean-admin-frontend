@@ -7,6 +7,7 @@ import { z } from "zod";
 import { createBylawAction } from "../actions";
 import { useMemo, useState } from "react";
 import { useCurrentLocale, useI18n } from "@/locales/client";
+import { Button } from "@/components/Buttons";
 
 const gradeSchema = z.object({
   key: z.string().nonempty("Key is required"),
@@ -76,14 +77,16 @@ const bylawSchema = z.object({
 export type BylawFormValues = z.infer<typeof bylawSchema>;
 
 export default function CreateBylawForm({
-  departments
-}:{
+  departments,
+}: {
   departments: any[];
-}
-) {
+}) {
   const t = useI18n();
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
-  const maxGraduationProjectRequirements = useMemo(() => departments.length, [departments]);
+  const maxGraduationProjectRequirements = useMemo(
+    () => departments.length,
+    [departments]
+  );
   const router = useRouter();
   const {
     handleSubmit,
@@ -139,7 +142,9 @@ export default function CreateBylawForm({
     name: "graduationProjectRequirements",
   });
 
-  const canAddGraduationProjectRequirement = graduationProjectRequirementFields.length < maxGraduationProjectRequirements;
+  const canAddGraduationProjectRequirement =
+    graduationProjectRequirementFields.length <
+    maxGraduationProjectRequirements;
 
   const handleDepartmentChange = (index: number, value: string) => {
     const newSelectedDepartments = [...selectedDepartments];
@@ -160,39 +165,42 @@ export default function CreateBylawForm({
 
   return (
     <>
-      <h1 className='text-2xl font-bold'>{t("bylaw.create.title")}</h1>
-      <p className='mt-2 text-sm text-gray-600'>
-        <span className='text-red-500'>*</span> {t("bylaw.create.form.required")}
+      <h1 className="text-2xl font-bold">{t("bylaw.create.title")}</h1>
+      <p className="mt-2 text-sm text-gray-600">
+        <span className="text-red-500">*</span>{" "}
+        {t("bylaw.create.form.required")}
       </p>
 
-      <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
-          <label htmlFor='name' className='block font-medium text-gray-700'>
-            {t("bylaw.create.form.name")} <span className='text-red-500'>*</span>:
+          <label htmlFor="name" className="block font-medium text-gray-700">
+            {t("bylaw.create.form.name")}{" "}
+            <span className="text-red-500">*</span>:
           </label>
           <input
-            id='name'
-            type='text'
+            id="name"
+            type="text"
             {...register("name")}
-            className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           />
           {errors.name && (
-            <p className='mt-1 text-red-500 text-sm'>{errors.name.message}</p>
+            <p className="mt-1 text-red-500 text-sm">{errors.name.message}</p>
           )}
         </div>
 
         <div>
-          <label htmlFor='gpaScale' className='block font-medium text-gray-700'>
-            {t("bylaw.create.form.gpaScale")} <span className='text-red-500'>*</span>:
+          <label htmlFor="gpaScale" className="block font-medium text-gray-700">
+            {t("bylaw.create.form.gpaScale")}{" "}
+            <span className="text-red-500">*</span>:
           </label>
           <input
-            id='gpaScale'
-            type='number'
+            id="gpaScale"
+            type="number"
             {...register("gpaScale", { valueAsNumber: true })}
-            className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           />
           {errors.gpaScale && (
-            <p className='mt-1 text-red-500 text-sm'>
+            <p className="mt-1 text-red-500 text-sm">
               {errors.gpaScale.message}
             </p>
           )}
@@ -200,31 +208,33 @@ export default function CreateBylawForm({
 
         <div>
           <label
-            htmlFor='useDetailedHours'
-            className='inline-flex items-center'
+            htmlFor="useDetailedHours"
+            className="inline-flex items-center"
           >
             <input
-              id='useDetailedHours'
-              type='checkbox'
+              id="useDetailedHours"
+              type="checkbox"
               {...register("useDetailedHours")}
-              className='form-checkbox text-blue-500'
+              className="form-checkbox text-blue-500"
             />
-            <span className='ml-2 text-gray-700'>{t("bylaw.create.form.useDetailedHours")}</span>
+            <span className="ml-2 text-gray-700">
+              {t("bylaw.create.form.useDetailedHours")}
+            </span>
           </label>
         </div>
 
         <div>
           <label
-            htmlFor='useDetailedGraduationProjectHours'
-            className='inline-flex items-center'
+            htmlFor="useDetailedGraduationProjectHours"
+            className="inline-flex items-center"
           >
             <input
-              id='useDetailedGraduationProjectHours'
-              type='checkbox'
+              id="useDetailedGraduationProjectHours"
+              type="checkbox"
               {...register("useDetailedGraduationProjectHours")}
-              className='form-checkbox text-blue-500'
+              className="form-checkbox text-blue-500"
             />
-            <span className='ml-2 text-gray-700'>
+            <span className="ml-2 text-gray-700">
               {t("bylaw.create.form.useDetailedGraduationProjectHours")}
             </span>
           </label>
@@ -232,120 +242,124 @@ export default function CreateBylawForm({
 
         <div>
           <label
-            htmlFor='yearApplied'
-            className='block font-medium text-gray-700'
+            htmlFor="yearApplied"
+            className="block font-medium text-gray-700"
           >
-            {t("bylaw.create.form.yearApplied")} <span className='text-red-500'>*</span>:
+            {t("bylaw.create.form.yearApplied")}{" "}
+            <span className="text-red-500">*</span>:
           </label>
           <input
-            id='yearApplied'
-            type='number'
+            id="yearApplied"
+            type="number"
             {...register("yearApplied", { valueAsNumber: true })}
-            className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           />
           {errors.yearApplied && (
-            <p className='mt-1 text-red-500 text-sm'>
+            <p className="mt-1 text-red-500 text-sm">
               {errors.yearApplied.message}
             </p>
           )}
         </div>
 
         <fieldset>
-          <legend className='block text-lg font-medium text-gray-700'>
+          <legend className="block text-lg font-medium text-gray-700">
             {t("bylaw.create.form.gradeWeights")}
           </legend>
-          <ul className='space-y-4'>
+          <ul className="space-y-4">
             {gradeWeightFields.map((field, index) => (
               <li
                 key={field.id}
-                className='border border-gray-300 p-4 rounded-md list-none'
+                className="border border-gray-300 p-4 rounded-md list-none"
               >
                 <div>
                   <label
                     htmlFor={`gradeWeights.${index}.key`}
-                    className='block font-medium text-gray-700'
+                    className="block font-medium text-gray-700"
                   >
-                    Key <span className='text-red-500'>*</span>:
+                    Key <span className="text-red-500">*</span>:
                   </label>
                   <input
                     id={`gradeWeights.${index}.key`}
-                    type='text'
-                    placeholder='Key'
+                    type="text"
+                    placeholder="Key"
                     {...register(`gradeWeights.${index}.key` as const)}
-                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor={`gradeWeights.${index}.weight`}
-                    className='block font-medium text-gray-700'
+                    className="block font-medium text-gray-700"
                   >
-                    {t("bylaw.create.form.gradeWeight")} <span className='text-red-500'>*</span>:
+                    {t("bylaw.create.form.gradeWeight")}{" "}
+                    <span className="text-red-500">*</span>:
                   </label>
                   <input
                     id={`gradeWeights.${index}.weight`}
-                    type='number'
+                    type="number"
                     min={0}
                     step={0.01}
-                    placeholder='Weight'
+                    placeholder="Weight"
                     {...register(`gradeWeights.${index}.weight` as const, {
                       valueAsNumber: true,
                     })}
-                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor={`gradeWeights.${index}.percentage.min`}
-                    className='block font-medium text-gray-700'
+                    className="block font-medium text-gray-700"
                   >
-                    {t("bylaw.create.form.minPercentage")} <span className='text-red-500'>*</span>:
+                    {t("bylaw.create.form.minPercentage")}{" "}
+                    <span className="text-red-500">*</span>:
                   </label>
                   <input
                     id={`gradeWeights.${index}.percentage.min`}
-                    type='number'
+                    type="number"
                     min={0}
                     max={100}
-                    placeholder='Min Percentage'
+                    placeholder="Min Percentage"
                     {...register(
                       `gradeWeights.${index}.percentage.min` as const,
                       { valueAsNumber: true }
                     )}
-                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                   />
                 </div>
                 <div>
                   <label
                     htmlFor={`gradeWeights.${index}.percentage.max`}
-                    className='block font-medium text-gray-700'
+                    className="block font-medium text-gray-700"
                   >
-                    {t("bylaw.create.form.maxPercentage")} <span className='text-red-500'>*</span>:
+                    {t("bylaw.create.form.maxPercentage")}{" "}
+                    <span className="text-red-500">*</span>:
                   </label>
                   <input
                     id={`gradeWeights.${index}.percentage.max`}
-                    type='number'
+                    type="number"
                     min={0}
                     max={100}
-                    placeholder='Max Percentage'
+                    placeholder="Max Percentage"
                     {...register(
                       `gradeWeights.${index}.percentage.max` as const,
                       { valueAsNumber: true }
                     )}
-                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                   />
                 </div>
-                <button
-                  type='button'
+                <Button
+                  type="button"
                   onClick={() => removeGradeWeight(index)}
-                  className='mt-2 text-red-500 hover:underline'
+                  className="mt-2 text-red-500 hover:underline"
                 >
                   {t("bylaw.create.form.remove")}
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
-          <button
-            type='button'
+          <Button
+            type="button"
             onClick={() =>
               appendGradeWeight({
                 key: "",
@@ -353,35 +367,35 @@ export default function CreateBylawForm({
                 percentage: { min: 0, max: 100 },
               })
             }
-            className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
             {t("bylaw.create.form.addGradeWeight")}
-          </button>
+          </Button>
         </fieldset>
 
         <fieldset>
-          <legend className='block text-lg font-medium text-gray-700'>
+          <legend className="block text-lg font-medium text-gray-700">
             {t("bylaw.create.form.levelRequirements")}
           </legend>
-          <ul className='space-y-4'>
+          <ul className="space-y-4">
             {levelRequirementFields.map((field, index) => (
               <li
                 key={field.id}
-                className='border border-gray-300 p-4 rounded-md list-none'
+                className="border border-gray-300 p-4 rounded-md list-none"
               >
                 <div>
                   <label
                     htmlFor={`levelRequirements.${index}.key`}
-                    className='block font-medium text-gray-700'
+                    className="block font-medium text-gray-700"
                   >
-                    Key <span className='text-red-500'>*</span>:
+                    Key <span className="text-red-500">*</span>:
                   </label>
                   <input
                     id={`levelRequirements.${index}.key`}
-                    type='text'
-                    placeholder='Key'
+                    type="text"
+                    placeholder="Key"
                     {...register(`levelRequirements.${index}.key` as const)}
-                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                   />
                 </div>
                 {useDetailedHours ? (
@@ -389,39 +403,41 @@ export default function CreateBylawForm({
                     <div>
                       <label
                         htmlFor={`levelRequirements.${index}.mandatoryHours`}
-                        className='block font-medium text-gray-700'
+                        className="block font-medium text-gray-700"
                       >
-                        {t("bylaw.create.form.mandatoryHours")} <span className='text-red-500'>*</span>:
+                        {t("bylaw.create.form.mandatoryHours")}{" "}
+                        <span className="text-red-500">*</span>:
                       </label>
                       <input
                         id={`levelRequirements.${index}.mandatoryHours`}
-                        type='number'
+                        type="number"
                         min={0}
-                        placeholder='Mandatory Hours'
+                        placeholder="Mandatory Hours"
                         {...register(
                           `levelRequirements.${index}.mandatoryHours` as const,
                           { valueAsNumber: true }
                         )}
-                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor={`levelRequirements.${index}.electiveHours`}
-                        className='block font-medium text-gray-700'
+                        className="block font-medium text-gray-700"
                       >
-                        {t("bylaw.create.form.electiveHours")} <span className='text-red-500'>*</span>:
+                        {t("bylaw.create.form.electiveHours")}{" "}
+                        <span className="text-red-500">*</span>:
                       </label>
                       <input
                         id={`levelRequirements.${index}.electiveHours`}
-                        type='number'
+                        type="number"
                         min={0}
-                        placeholder='Elective Hours'
+                        placeholder="Elective Hours"
                         {...register(
                           `levelRequirements.${index}.electiveHours` as const,
                           { valueAsNumber: true }
                         )}
-                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                       />
                     </div>
                   </>
@@ -429,54 +445,56 @@ export default function CreateBylawForm({
                   <div>
                     <label
                       htmlFor={`levelRequirements.${index}.totalHours`}
-                      className='block font-medium text-gray-700'
+                      className="block font-medium text-gray-700"
                     >
-                      {t("bylaw.create.form.totalHours")} <span className='text-red-500'>*</span>:
+                      {t("bylaw.create.form.totalHours")}{" "}
+                      <span className="text-red-500">*</span>:
                     </label>
                     <input
                       id={`levelRequirements.${index}.totalHours`}
-                      type='number'
+                      type="number"
                       min={0}
-                      placeholder='Total Hours'
+                      placeholder="Total Hours"
                       {...register(
                         `levelRequirements.${index}.totalHours` as const,
                         { valueAsNumber: true }
                       )}
-                      className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                     />
                   </div>
                 )}
                 <div>
                   <label
                     htmlFor={`levelRequirements.${index}.maxYears`}
-                    className='block font-medium text-gray-700'
+                    className="block font-medium text-gray-700"
                   >
-                    {t("bylaw.create.form.maxYears")} <span className='text-red-500'>*</span>:
+                    {t("bylaw.create.form.maxYears")}{" "}
+                    <span className="text-red-500">*</span>:
                   </label>
                   <input
                     id={`levelRequirements.${index}.maxYears`}
-                    type='number'
+                    type="number"
                     min={1}
-                    placeholder='Max Years'
+                    placeholder="Max Years"
                     {...register(
                       `levelRequirements.${index}.maxYears` as const,
                       { valueAsNumber: true }
                     )}
-                    className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                   />
                 </div>
-                <button
-                  type='button'
+                <Button
+                  type="button"
                   onClick={() => removeLevelRequirement(index)}
-                  className='mt-2 text-red-500 hover:underline'
+                  className="mt-2 text-red-500 hover:underline"
                 >
                   {t("bylaw.create.form.remove")}
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
-          <button
-            type='button'
+          <Button
+            type="button"
             onClick={() =>
               appendLevelRequirement({
                 key: "",
@@ -486,83 +504,91 @@ export default function CreateBylawForm({
                 maxYears: 1,
               })
             }
-            className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
             {t("bylaw.create.form.addLevelRequirements")}
-          </button>
+          </Button>
         </fieldset>
 
         <fieldset>
-          <legend className='block text-lg font-medium text-gray-700'>
+          <legend className="block text-lg font-medium text-gray-700">
             {t("bylaw.create.form.graduationProjectRequirements")}
           </legend>
-          <ul className='space-y-4'>
+          <ul className="space-y-4">
             {graduationProjectRequirementFields.map((field, index) => (
               <li
                 key={field.id}
-                className='border border-gray-300 p-4 rounded-md list-none'
+                className="border border-gray-300 p-4 rounded-md list-none"
               >
-                 <select
-                    id={`graduationProjectRequirements.${index}.key`}
-                    {...register(`graduationProjectRequirements.${index}.key`)}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 bg-white text-gray-900"
-                    defaultValue={field.key}
-                    onChange={(e) => handleDepartmentChange(index, e.target.value)}
-                  >
-                    <option value="" disabled className="text-gray-500">{t("bylaw.create.form.selectDepartmentCode")}</option>
-                    {departments.filter(
+                <select
+                  id={`graduationProjectRequirements.${index}.key`}
+                  {...register(`graduationProjectRequirements.${index}.key`)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 bg-white text-gray-900"
+                  defaultValue={field.key}
+                  onChange={(e) =>
+                    handleDepartmentChange(index, e.target.value)
+                  }
+                >
+                  <option value="" disabled className="text-gray-500">
+                    {t("bylaw.create.form.selectDepartmentCode")}
+                  </option>
+                  {departments
+                    .filter(
                       (department) =>
                         !selectedDepartments.includes(department.code) ||
                         department.code === selectedDepartments[index]
-                    ).map((department) => (
+                    )
+                    .map((department) => (
                       <option key={department._id} value={department.code}>
                         {department.code}
                       </option>
                     ))}
-                  </select>
-                  {errors.graduationProjectRequirements?.[index]?.key && (
-                    <p className="mt-1 text-red-500 text-sm">
-                      {errors.graduationProjectRequirements[index]?.key?.message}
-                    </p>
-                  )}
+                </select>
+                {errors.graduationProjectRequirements?.[index]?.key && (
+                  <p className="mt-1 text-red-500 text-sm">
+                    {errors.graduationProjectRequirements[index]?.key?.message}
+                  </p>
+                )}
                 {useDetailedGraduationProjectHours ? (
                   <>
                     <div>
                       <label
                         htmlFor={`graduationProjectRequirements.${index}.mandatoryHours`}
-                        className='block font-medium text-gray-700'
+                        className="block font-medium text-gray-700"
                       >
-                        {t("bylaw.create.form.mandatoryHours")} <span className='text-red-500'>*</span>:
+                        {t("bylaw.create.form.mandatoryHours")}{" "}
+                        <span className="text-red-500">*</span>:
                       </label>
                       <input
                         id={`graduationProjectRequirements.${index}.mandatoryHours`}
-                        type='number'
+                        type="number"
                         min={0}
-                        placeholder='Mandatory Hours'
+                        placeholder="Mandatory Hours"
                         {...register(
                           `graduationProjectRequirements.${index}.mandatoryHours` as const,
                           { valueAsNumber: true }
                         )}
-                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                       />
                     </div>
                     <div>
                       <label
                         htmlFor={`graduationProjectRequirements.${index}.electiveHours`}
-                        className='block font-medium text-gray-700'
+                        className="block font-medium text-gray-700"
                       >
-                        {t("bylaw.create.form.electiveHours")} <span className='text-red-500'>*</span>:
+                        {t("bylaw.create.form.electiveHours")}{" "}
+                        <span className="text-red-500">*</span>:
                       </label>
                       <input
                         id={`graduationProjectRequirements.${index}.electiveHours`}
-                        type='number'
+                        type="number"
                         min={0}
-                        placeholder='Elective Hours'
+                        placeholder="Elective Hours"
                         {...register(
                           `graduationProjectRequirements.${index}.electiveHours` as const,
                           { valueAsNumber: true }
                         )}
-                        className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                       />
                     </div>
                   </>
@@ -570,106 +596,111 @@ export default function CreateBylawForm({
                   <div>
                     <label
                       htmlFor={`graduationProjectRequirements.${index}.totalHours`}
-                      className='block font-medium text-gray-700'
+                      className="block font-medium text-gray-700"
                     >
-                      {t("bylaw.create.form.totalHours")} <span className='text-red-500'>*</span>:
+                      {t("bylaw.create.form.totalHours")}{" "}
+                      <span className="text-red-500">*</span>:
                     </label>
                     <input
                       id={`graduationProjectRequirements.${index}.totalHours`}
-                      type='number'
+                      type="number"
                       min={0}
-                      placeholder='Total Hours'
+                      placeholder="Total Hours"
                       {...register(
                         `graduationProjectRequirements.${index}.totalHours` as const,
                         { valueAsNumber: true }
                       )}
-                      className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
                     />
                   </div>
                 )}
-                <button
-                  type='button'
+                <Button
+                  type="button"
                   onClick={() => removeGraduationProjectRequirement(index)}
-                  className='mt-2 text-red-500 hover:underline'
+                  className="mt-2 text-red-500 hover:underline"
                 >
                   {t("bylaw.create.form.remove")}
-                </button>
+                </Button>
               </li>
             ))}
           </ul>
           {canAddGraduationProjectRequirement && (
-          <button
-            type='button'
-            onClick={() =>
-              appendGraduationProjectRequirement({
-                key: "",
-                mandatoryHours: 0,
-                electiveHours: 0,
-                totalHours: 0,
-              })
-            }
-            className='mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600'
-          >
-            {t("bylaw.create.form.addGraduationProjectRequirements")}
-          </button>
+            <Button
+              type="button"
+              onClick={() =>
+                appendGraduationProjectRequirement({
+                  key: "",
+                  mandatoryHours: 0,
+                  electiveHours: 0,
+                  totalHours: 0,
+                })
+              }
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              {t("bylaw.create.form.addGraduationProjectRequirements")}
+            </Button>
           )}
         </fieldset>
 
         <div>
           <label
-            htmlFor='graduateRequirement'
-            className='block font-medium text-gray-700'
+            htmlFor="graduateRequirement"
+            className="block font-medium text-gray-700"
           >
-            {t("bylaw.create.form.graduationRequirement")} <span className='text-red-500'>*</span>:
+            {t("bylaw.create.form.graduationRequirement")}{" "}
+            <span className="text-red-500">*</span>:
           </label>
           <input
-            id='graduateRequirement'
-            type='number'
+            id="graduateRequirement"
+            type="number"
             {...register("graduateRequirement", { valueAsNumber: true })}
-            className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           />
           {errors.graduateRequirement && (
-            <p className='mt-1 text-red-500 text-sm'>
+            <p className="mt-1 text-red-500 text-sm">
               {errors.graduateRequirement.message}
             </p>
           )}
 
-          <p className='mt-2 text-sm text-gray-600'>
+          <p className="mt-2 text-sm text-gray-600">
             {t("bylaw.create.form.graduationRequirementDescription")}
           </p>
         </div>
 
         <div>
           <label
-            htmlFor='coursePassCriteria'
-            className='block font-medium text-gray-700'
+            htmlFor="coursePassCriteria"
+            className="block font-medium text-gray-700"
           >
-            {t("bylaw.create.form.coursePassCriteria")} <span className='text-red-500'>*</span>:
+            {t("bylaw.create.form.coursePassCriteria")}{" "}
+            <span className="text-red-500">*</span>:
           </label>
           <input
-            id='coursePassCriteria'
-            type='number'
+            id="coursePassCriteria"
+            type="number"
             {...register("coursePassCriteria", { valueAsNumber: true })}
-            className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50'
+            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           />
           {errors.coursePassCriteria && (
-            <p className='mt-1 text-red-500 text-sm'>
+            <p className="mt-1 text-red-500 text-sm">
               {errors.coursePassCriteria.message}
             </p>
           )}
 
-          <p className='mt-2 text-sm text-gray-600'>
+          <p className="mt-2 text-sm text-gray-600">
             {t("bylaw.create.form.coursePassCriteriaDescription")}
           </p>
         </div>
 
-        <button
-          type='submit'
+        <Button
+          type="submit"
           disabled={isSubmitting}
-          className='px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50'
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
         >
-          {isSubmitting ? t("bylaw.create.form.submitting"): t("bylaw.create.form.submit")}
-        </button>
+          {isSubmitting
+            ? t("bylaw.create.form.submitting")
+            : t("bylaw.create.form.submit")}
+        </Button>
       </form>
     </>
   );

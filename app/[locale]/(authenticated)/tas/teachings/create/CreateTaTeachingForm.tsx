@@ -15,7 +15,13 @@ export type CreateTaTeachingFormValues = z.infer<
   typeof createTaTeachingFormSchema
 >;
 
-export default function CreateTaTeachingForm({ courses }: { courses: any[] }) {
+export default function CreateTaTeachingForm({
+  tas,
+  courses,
+}: {
+  tas: any[];
+  courses: any[];
+}) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -30,11 +36,14 @@ export default function CreateTaTeachingForm({ courses }: { courses: any[] }) {
     const createTaTeachingResponse = await createTaTeachingAction(values);
 
     if (!createTaTeachingResponse.success) {
-      return toast.error(createTaTeachingResponse.error?.message);
+      for (const error of createTaTeachingResponse.errors) {
+        toast.error(error.message);
+      }
+      return;
     }
 
     toast.success("TA teaching created successfully!");
-    router.push(`/ta/teachings`);
+    router.push(`/tas/teachings`);
   };
 
   return (
@@ -42,13 +51,22 @@ export default function CreateTaTeachingForm({ courses }: { courses: any[] }) {
       <h1>Assign a TA to a Course</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Email</label>
-        <input type='email' {...register("email")} />
+        <label>TA</label>
+        <select {...register("email")} defaultValue={""} required>
+          <option disabled value="">
+            Select a TA
+          </option>
+          {tas.map((ta, index) => (
+            <option key={index} value={ta.email}>
+              {ta.fullName}
+            </option>
+          ))}
+        </select>
         {errors.email && <p>{errors.email.message}</p>}
 
         <label>Course</label>
-        <select {...register("course")}>
-          <option disabled selected>
+        <select {...register("course")} defaultValue={""} required>
+          <option disabled value="">
             Select a course
           </option>
           {courses.map((course) => (
@@ -59,9 +77,9 @@ export default function CreateTaTeachingForm({ courses }: { courses: any[] }) {
         </select>
         {errors.course && <p>{errors.course.message}</p>}
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        </Button>
       </form>
     </>
   );

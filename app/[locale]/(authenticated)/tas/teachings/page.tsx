@@ -77,10 +77,10 @@ export default async function Page({
     <>
       <div>
         <h1>TA Teachings Available</h1>
-        <SelectFilter name='department' options={departmentOptions} />
+        <SelectFilter name="department" options={departmentOptions} />
         <div>
           {taTeachings.map((teaching: any) => (
-            <div className='border border-black w-80'>
+            <div className="border border-black w-80">
               <p>
                 <b>Name: </b>
                 {teaching.ta.fullName}
@@ -108,7 +108,7 @@ export default async function Page({
           ))}
           <Pagination totalPages={total / limit} />
         </div>
-        <Link href='/ta/teachings/create'>Create TA Teaching</Link>
+        <Link href="/tas/teachings/create">Create TA Teaching</Link>
       </div>
     </>
   );

@@ -29,9 +29,7 @@ export const createTaTeachingAction = async (
   if (response.status !== 201) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 
@@ -48,22 +46,17 @@ export const deleteTaTeachingAction = async (
   const taTeachingId = data.taTeachingId;
   console.log(taTeachingId);
 
-  const response = await scheduleAPI.delete(
-    `/ta-teaching/${taTeachingId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const response = await scheduleAPI.delete(`/ta-teaching/${taTeachingId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   console.log(response.data);
 
   if (response.status !== 200) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 

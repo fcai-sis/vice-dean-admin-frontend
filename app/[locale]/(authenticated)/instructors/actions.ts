@@ -1,6 +1,6 @@
 "use server";
 import { getAccessToken } from "@/lib";
-import { hallSlotAPI, instructorTaAPI } from "@/api";
+import { instructorsAPI } from "@/api";
 import { revalidatePath } from "next/cache";
 import { CreateInstructorFormValues } from "./create/CreateInstructorForm";
 import { deleteInstructorFormValues } from "./DeleteInstructorForm";
@@ -19,23 +19,17 @@ export const createInstructorAction = async (
   };
   console.log(requestBody);
 
-  const response = await instructorTaAPI.post(
-    `/instructors/create`,
-    requestBody,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const response = await instructorsAPI.post(`/`, requestBody, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   console.log(response.data);
 
   if (response.status !== 201) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 
@@ -52,22 +46,17 @@ export const deleteInstructorAction = async (
   const instructorId = data.instructorId;
   console.log(instructorId);
 
-  const response = await instructorTaAPI.delete(
-    `/instructors/delete/${instructorId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const response = await instructorsAPI.delete(`/${instructorId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   console.log(response.data);
 
   if (response.status !== 200) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 

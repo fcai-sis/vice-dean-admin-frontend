@@ -5,6 +5,9 @@ import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { createHallAction } from "../actions";
+import { Button } from "@/components/Buttons";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
 
 const createHallFormSchema = z.object({
   name: z.object({
@@ -17,6 +20,7 @@ const createHallFormSchema = z.object({
 export type CreateHallFormValues = z.infer<typeof createHallFormSchema>;
 
 export default function CreateHallForm() {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -43,29 +47,60 @@ export default function CreateHallForm() {
 
   return (
     <>
-      <h1>Create Hall</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Hall Name</label>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="rounded-lg border border-slate-200 bg-white flex flex-col p-4 gap-4"
+      >
+        <h1>
+          {tt(locale, {
+            en: "Create Hall",
+            ar: "إنشاء قاعة",
+          })}
+        </h1>
+        <label>
+          {tt(locale, {
+            en: "Name",
+            ar: "الاسم",
+          })}
+        </label>
         <input
-          type='text'
-          placeholder='English name'
+          type="text"
+          placeholder={tt(locale, {
+            en: "English name",
+            ar: "الاسم الانجليزي",
+          })}
           {...register("name.en")}
         />
         {errors.name?.en && <p>{errors.name.en.message}</p>}
-        <input type='text' placeholder='Arabic name' {...register("name.ar")} />
-        {errors.name?.ar && <p>{errors.name.ar.message}</p>}
-        <label>Capacity</label>
         <input
-          type='number'
-          placeholder='Capacity'
+          type="text"
+          placeholder={tt(locale, {
+            en: "Arabic name",
+            ar: "الاسم العربي",
+          })}
+          {...register("name.ar")}
+        />
+        {errors.name?.ar && <p>{errors.name.ar.message}</p>}
+        <label>
+          {tt(locale, {
+            en: "Capacity",
+            ar: "السعة",
+          })}
+        </label>
+        <input
+          type="number"
+          placeholder="Capacity"
           {...register("capacity", { valueAsNumber: true })}
         />
         {errors.capacity && <p>{errors.capacity.message}</p>}
-
-        <button className='btn' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        <div className="flex justify-center items-center">
+          <Button type="submit" disabled={isSubmitting}>
+            {tt(locale, {
+              en: "Create Hall",
+              ar: "إنشاء قاعة",
+            })}
+          </Button>
+        </div>
       </form>
     </>
   );

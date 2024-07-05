@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getAccessToken } from "@/lib";
-import { coursesAPI, hallSlotAPI } from "@/api";
+import { coursesAPI, hallsAPI, hallSlotAPI } from "@/api";
 import { revalidatePath } from "next/cache";
 import CreateLectureForm from "./CreateLectureForm";
 
@@ -23,7 +23,7 @@ export const getAllCourses = async () => {
 export const getHalls = async () => {
   const accessToken = await getAccessToken();
 
-  const response = await hallSlotAPI.get(`/hall/read`, {
+  const response = await hallsAPI.get(`/`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

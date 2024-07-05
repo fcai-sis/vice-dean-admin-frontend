@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import DeleteSlotForm from "./DeleteSlotForm";
 import Schedule from "@/components/Schedule";
+import { PageHeader } from "@/components/PageBuilder";
+import { getCurrentLocale } from "@/locales/server";
 
 export const getSlots = async () => {
   const { data } = await hallSlotAPI.get("/slot");
@@ -34,11 +36,18 @@ export const getSlots = async () => {
 // };
 
 export default async function Page() {
+  const locale = getCurrentLocale();
   const { slots, timeRanges, days } = await getSlots();
 
   return (
     <>
-      <h1>Slots</h1>
+      <PageHeader
+        title={tt(locale, {
+          en: "Slots",
+          ar: "الفترات",
+        })}
+        actions={[]}
+      />
       <Schedule
         slots={slots}
         timeRanges={timeRanges}

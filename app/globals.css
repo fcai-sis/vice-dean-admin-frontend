@@ -12,10 +12,6 @@
   @apply text-slate-600;
 }
 
-.btn {
-  @apply px-4 py-2 bg-blue-500 text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors duration-300 flex gap-2;
-}
-
 a {
   @apply p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors duration-300;
 }

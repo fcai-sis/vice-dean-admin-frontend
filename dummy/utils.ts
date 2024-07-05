@@ -27,6 +27,11 @@ export const fakeResponse = <T>(data: T): Promise<T> => {
 
 export function localizedLevel(level: number) {
   switch (level) {
+    case 0:
+      return {
+        en: "All Levels",
+        ar: "جميع المستويات",
+      };
     case 1:
       return {
         en: "Freshman",

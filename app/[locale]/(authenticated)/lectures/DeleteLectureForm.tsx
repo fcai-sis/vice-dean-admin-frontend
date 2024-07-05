@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { deleteLectureAction } from "./actions";
+import { Button } from "@/components/Buttons";
 
 const deleteLectureFormSchema = z.object({
   lectureId: z.string(),
@@ -42,9 +43,9 @@ export default function DeleteLectureForm({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button variant="danger" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Deleting..." : "Delete"}
-        </button>
+        </Button>
       </form>
     </>
   );

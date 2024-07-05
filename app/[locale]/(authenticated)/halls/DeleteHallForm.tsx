@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { deleteHallAction } from "./actions";
+import { Button } from "@/components/Buttons";
+import { useCurrentLocale } from "@/locales/client";
+import { tt } from "@/lib";
 
 const deleteHallFormSchema = z.object({
   hallId: z.string(),
@@ -13,6 +16,7 @@ const deleteHallFormSchema = z.object({
 export type deleteHallFormValues = z.infer<typeof deleteHallFormSchema>;
 
 export default function DeleteHallForm({ hallId }: { hallId: string }) {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -37,11 +41,13 @@ export default function DeleteHallForm({ hallId }: { hallId: string }) {
 
   return (
     <>
-      <h2>Delete Hall</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <button className='btn' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Deleting..." : "Delete"}
-        </button>
+        <Button variant="danger" type="submit" disabled={isSubmitting}>
+          {tt(locale, {
+            en: "Delete Hall",
+            ar: "حذف القاعة",
+          })}
+        </Button>
       </form>
     </>
   );

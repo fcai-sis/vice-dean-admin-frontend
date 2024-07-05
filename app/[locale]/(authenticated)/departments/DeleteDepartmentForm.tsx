@@ -5,14 +5,21 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { deleteDepartmentAction } from "./actions";
+import { Button } from "@/components/Buttons";
 
 const deleteDepartmentFormSchema = z.object({
   departmentId: z.string(),
 });
 
-export type deleteDepartmentFormValues = z.infer<typeof deleteDepartmentFormSchema>;
+export type deleteDepartmentFormValues = z.infer<
+  typeof deleteDepartmentFormSchema
+>;
 
-export default function DeleteDepartmentForm({ departmentId }: { departmentId: string }) {
+export default function DeleteDepartmentForm({
+  departmentId,
+}: {
+  departmentId: string;
+}) {
   const router = useRouter();
   const {
     handleSubmit,
@@ -38,9 +45,9 @@ export default function DeleteDepartmentForm({ departmentId }: { departmentId: s
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Deleting..." : "Delete"}
-        </button>
+        </Button>
       </form>
     </>
   );

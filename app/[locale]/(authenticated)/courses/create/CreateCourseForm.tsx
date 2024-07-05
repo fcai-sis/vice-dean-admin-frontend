@@ -90,9 +90,9 @@ export default function CreateCourseForm() {
           <option value={CourseTypeEnum[2]}>Graduation</option>
         </select> */}
 
-        <button className="btn" type="submit" disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        </Button>
       </form>
     </>
   );

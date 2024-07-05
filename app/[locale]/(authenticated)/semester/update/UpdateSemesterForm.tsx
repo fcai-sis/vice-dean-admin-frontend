@@ -121,16 +121,16 @@ export default function UpdateSemesterForm({
               }}
             >
               Remove Course
-            </button>
+            </Button>
           </div>
         ))}
         <button type='button' onClick={() => addCourse({ course: "" })}>
           Add Course
-        </button>
+        </Button>
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button type='submit' disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        </Button>
       </form>
     </>
   );

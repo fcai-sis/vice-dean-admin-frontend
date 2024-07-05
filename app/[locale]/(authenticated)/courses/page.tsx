@@ -1,11 +1,16 @@
 import { coursesAPI, departmentsAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { getAccessToken, getCurrentPage, limit } from "@/lib";
+import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import DeleteCourseForm from "./DeleteCourseForm";
+import { CardGrid, FilterBar, PageHeader } from "@/components/PageBuilder";
+import { getCurrentLocale } from "@/locales/server";
+import { ButtonLink } from "@/components/Buttons";
+import Card from "@/components/Card";
+import { DepartmentChip } from "@/components/AnnouncementCard";
 
 export const getCourses = async (page: number, department: DepartmentType) => {
   const accessToken = await getAccessToken();
@@ -15,7 +20,7 @@ export const getCourses = async (page: number, department: DepartmentType) => {
       Authorization: `Bearer ${accessToken}`,
     },
     params: {
-      skip: page * limit - limit,
+      page,
       limit,
       department,
     },
@@ -46,58 +51,91 @@ export const getDepartments = async () => {
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string; department: string } }>) {
+  const locale = getCurrentLocale();
+
   const page = getCurrentPage(searchParams);
   const departmentSelected =
     searchParams.department as unknown as DepartmentType;
 
-  const response = await getCourses(page, departmentSelected);
-  const courses = response.courses;
-  const total = response.totalCourses;
-  console.log(courses);
+  const { courses, total } = await getCourses(page, departmentSelected);
 
   const departmentResponse = await getDepartments();
   const departments = departmentResponse.departments;
 
   const departmentOptions = [
     {
-      label: "All",
+      label: tt(locale, {
+        en: "All Departments",
+        ar: "جميع الأقسام",
+      }),
       value: "",
     },
     ...departments.map((department: any) => ({
-      label: department.name.en,
+      label: tt(locale, department.name),
       value: department.code,
     })),
   ];
 
   return (
     <>
-      <h1>Courses</h1>
-      <SelectFilter name='department' options={departmentOptions} />
-      <div>
-        {courses.map((course: any) => (
-          <div className='border border-black w-80'>
-            <p>
-              <b>Code: </b>
-              {course.code}
-            </p>
-            <p>
-              <b>Name: </b>
-              {course.name.en}
-            </p>
-            <p>
-              <b>Departments: </b>
-              {course.departments?.map((department: any) => (
-                <span key={department.code}>{department.name.en}, </span>
-              ))}
-            </p>
-            <Link href={`/courses/${course.code}`}>View details</Link>
-            <DeleteCourseForm courseId={course._id} />
-          </div>
+      <PageHeader
+        title={tt(locale, {
+          en: "Courses",
+          ar: "المقررات",
+        })}
+        actions={[
+          <ButtonLink href="/courses/create">
+            {tt(locale, {
+              en: "Create Course",
+              ar: "إنشاء مقرر",
+            })}
+          </ButtonLink>,
+        ]}
+      />
+      <FilterBar
+        filters={[
+          {
+            label: tt(locale, {
+              en: "Department",
+              ar: "القسم",
+            }),
+            htmlFor: "department",
+            filter: (
+              <SelectFilter name="department" options={departmentOptions} />
+            ),
+          },
+        ]}
+      />
+      <CardGrid>
+        {courses.map((course: any, index: number) => (
+          <CourseCard key={index} course={course} />
         ))}
-        <Pagination totalPages={total / limit} />
-      </div>
-
-      <Link href='/courses/create'> Create Course</Link>
+      </CardGrid>
+      <Pagination totalPages={total / limit} />
     </>
+  );
+}
+
+function CourseCard({ course }: { course: any }) {
+  const locale = getCurrentLocale();
+  return (
+    <Card>
+      <h3>{tt(locale, course.name)}</h3>
+      <p>{course.code}</p>
+      <div className="flex gap-2">
+        {course.departments?.map((department: any) => (
+          <DepartmentChip key={department.code} department={department} />
+        ))}
+      </div>
+      <div className="flex gap-2">
+        <ButtonLink href={`/courses/${course.code}`}>
+          {tt(locale, {
+            en: "View",
+            ar: "عرض",
+          })}
+        </ButtonLink>
+        <DeleteCourseForm courseId={course._id} />
+      </div>
+    </Card>
   );
 }

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { endSemesterAction } from "./actions";
+import { Button } from "@/components/Buttons";
 
 export default function EndSemesterForm() {
   const router = useRouter();
@@ -28,9 +29,8 @@ export default function EndSemesterForm() {
       <h1>End Latest Semester?</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <button
-          className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out active:bg-red-700 mb-4'
-          type='submit'
+        <Button
+          type="submit"
           disabled={isSubmitting}
           onClick={(e) => {
             if (
@@ -45,7 +45,7 @@ export default function EndSemesterForm() {
           }}
         >
           {isSubmitting ? "Processing..." : "End"}
-        </button>
+        </Button>
       </form>
     </>
   );

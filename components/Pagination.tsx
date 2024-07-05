@@ -9,6 +9,7 @@ import { NavArrowLeft, NavArrowRight } from "iconoir-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
+import { Button } from "./Buttons";
 
 function _Pagination({
   totalPages,
@@ -39,7 +40,7 @@ function _Pagination({
   return (
     <div className="flex items-center gap-2">
       {prevPage && (
-        <button
+        <Button
           className="p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors duration-300 flex gap-2"
           onClick={() => {
             router.push(
@@ -49,14 +50,13 @@ function _Pagination({
         >
           {locale === "ar" ? <NavArrowRight /> : <NavArrowLeft />}
           {t("pagination.previous")}
-        </button>
+        </Button>
       )}
       <span className="p-2 bg-slate-100 rounded-lg w-10 h-10 flex justify-center items-center">
         {currentPage.toLocaleString(locale === "ar" ? "ar-EG" : "en-US")}
       </span>
       {nextPage && (
-        <button
-          className="p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors duration-300 flex gap-2"
+        <Button
           onClick={() => {
             router.push(
               pathname + "?" + createQueryString("page", nextPage.toString())
@@ -65,7 +65,7 @@ function _Pagination({
         >
           {t("pagination.next")}
           {locale === "ar" ? <NavArrowLeft /> : <NavArrowRight />}
-        </button>
+        </Button>
       )}
     </div>
   );
@@ -78,8 +78,10 @@ export default function Pagination({
 }>) {
   const locale = useCurrentLocale();
   return (
-    <I18nProviderClient locale={locale}>
-      <_Pagination totalPages={totalPages} />
-    </I18nProviderClient>
+    <div className="py-4">
+      <I18nProviderClient locale={locale}>
+        <_Pagination totalPages={totalPages} />
+      </I18nProviderClient>
+    </div>
   );
 }

@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { deleteInstructorAction } from "./actions";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
+import { Button } from "@/components/Buttons";
 
 const deleteInstructorFormSchema = z.object({
   instructorId: z.string(),
@@ -19,6 +22,7 @@ export default function DeleteInstructorForm({
 }: {
   instructorId: string;
 }) {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -34,7 +38,10 @@ export default function DeleteInstructorForm({
     const deleteInstructorResponse = await deleteInstructorAction(values);
 
     if (!deleteInstructorResponse.success) {
-      return toast.error(deleteInstructorResponse.error?.message);
+      for (const error of deleteInstructorResponse.errors) {
+        toast.error(error.message);
+      }
+      return;
     }
 
     toast.success("Instructor deleted");
@@ -44,9 +51,12 @@ export default function DeleteInstructorForm({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <button className='btn' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Deleting..." : "Delete"}
-        </button>
+        <Button variant="danger" type="submit" disabled={isSubmitting}>
+          {tt(locale, {
+            en: "Delete",
+            ar: "حذف",
+          })}
+        </Button>
       </form>
     </>
   );

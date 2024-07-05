@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { createInstructorTeachingAction } from "../actions";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
+import { Button } from "@/components/Buttons";
 
 const createInstructorTeachingFormSchema = z.object({
   course: z.string(),
@@ -16,10 +19,13 @@ export type CreateInstructorTeachingFormValues = z.infer<
 >;
 
 export default function CreateInstructorTeachingForm({
+  instructors,
   courses,
 }: {
+  instructors: any[];
   courses: any[];
 }) {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -35,7 +41,10 @@ export default function CreateInstructorTeachingForm({
       await createInstructorTeachingAction(values);
 
     if (!createInstructorTeachingResponse.success) {
-      return toast.error(createInstructorTeachingResponse.error?.message);
+      for (const error of createInstructorTeachingResponse.errors) {
+        toast.error(error.message);
+      }
+      return;
     }
 
     toast.success("Instructor teaching created successfully!");
@@ -47,26 +56,32 @@ export default function CreateInstructorTeachingForm({
       <h1>Assign an Instructor to a Course</h1>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Email</label>
-        <input type='email' {...register("email")} />
-        {errors.email && <p>{errors.email.message}</p>}
+        <label>Instructor</label>
+        <select {...register("email")} defaultValue={""} required>
+          <option disabled value="">
+            Select an Instructor
+          </option>
+          {instructors.map((instructor, index) => (
+            <option key={index} value={instructor.email}>
+              {instructor.fullName}
+            </option>
+          ))}
+        </select>
 
         <label>Course</label>
-        <select {...register("course")}>
-          <option disabled selected>
-            Select a course
-          </option>
+        <select {...register("course")} defaultValue={""} required>
+          <option disabled>Select a course</option>
           {courses.map((course) => (
-            <option key={course._id} value={course.code}>
-              {course.code}
+            <option key={course.code} value={course.code}>
+              ({course.code}) {tt(locale, course.name)}
             </option>
           ))}
         </select>
         {errors.course && <p>{errors.course.message}</p>}
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        </Button>
       </form>
     </>
   );

@@ -1,6 +1,6 @@
 "use server";
 import { getAccessToken } from "@/lib";
-import { hallSlotAPI, instructorTaAPI } from "@/api";
+import { tasAPI } from "@/api";
 import { revalidatePath } from "next/cache";
 import { deleteTaFormValues } from "./DeleteTaForm";
 import { CreateTaFormValues } from "./create/CreateTaForm";
@@ -17,27 +17,21 @@ export const createTaAction = async (data: CreateTaFormValues) => {
   };
   console.log(requestBody);
 
-  const response = await instructorTaAPI.post(
-    `/teacherAssistants/create`,
-    requestBody,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const response = await tasAPI.post(`/`, requestBody, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   console.log(response.data);
 
   if (response.status !== 201) {
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 
-  revalidatePath("/ta");
+  revalidatePath("/tas");
 
   return { success: true };
 };
@@ -48,14 +42,11 @@ export const deleteTaAction = async (data: deleteTaFormValues) => {
   const taId = data.taId;
   console.log(taId);
 
-  const response = await instructorTaAPI.delete(
-    `/teacherAssistants/delete/${taId}`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const response = await tasAPI.delete(`/${taId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   console.log(response.data);
 
   if (response.status !== 200) {
@@ -67,7 +58,7 @@ export const deleteTaAction = async (data: deleteTaFormValues) => {
     };
   }
 
-  revalidatePath("/ta");
+  revalidatePath("/tas");
 
   return { success: true };
 };

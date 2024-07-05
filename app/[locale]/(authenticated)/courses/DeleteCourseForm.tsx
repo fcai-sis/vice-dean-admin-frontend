@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { deleteCourseAction } from "./actions";
+import { Button } from "@/components/Buttons";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
+import Spinner from "@/components/Spinner";
 
 const deleteCourseFormSchema = z.object({
   courseId: z.string(),
@@ -13,6 +17,7 @@ const deleteCourseFormSchema = z.object({
 export type deleteCourseFormValues = z.infer<typeof deleteCourseFormSchema>;
 
 export default function DeleteCourseForm({ courseId }: { courseId: string }) {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -38,9 +43,16 @@ export default function DeleteCourseForm({ courseId }: { courseId: string }) {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <button className='btn' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Deleting..." : "Delete"}
-        </button>
+        <Button variant="danger" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <Spinner />
+          ) : (
+            tt(locale, {
+              en: "Delete",
+              ar: "حذف",
+            })
+          )}
+        </Button>
       </form>
     </>
   );

@@ -6,60 +6,57 @@ import toast from "react-hot-toast";
 import { z } from "zod";
 import { useCurrentLocale } from "@/locales/client";
 import { tt } from "@/lib";
-import { createInstructorAction } from "../actions";
+import { createTaAction } from "../actions";
 import { Button } from "@/components/Buttons";
+import { PageHeader } from "@/components/PageBuilder";
 
-const createInstructorFormSchema = z.object({
+const createTaFormSchema = z.object({
   fullName: z.string(),
   email: z.string().email(),
   department: z.string(),
   password: z.string(),
 });
 
-export type CreateInstructorFormValues = z.infer<
-  typeof createInstructorFormSchema
->;
+export type CreateTaFormValues = z.infer<typeof createTaFormSchema>;
 
-export default function CreateInstructorForm({
-  departments,
-}: {
-  departments: any[];
-}) {
+export default function CreateTaForm({ departments }: { departments: any[] }) {
   const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm<CreateInstructorFormValues>({
-    resolver: zodResolver(createInstructorFormSchema),
+  } = useForm<CreateTaFormValues>({
+    resolver: zodResolver(createTaFormSchema),
     defaultValues: {},
   });
 
-  const onSubmit = async (values: CreateInstructorFormValues) => {
-    const createInstructorResponse = await createInstructorAction(values);
+  const onSubmit = async (values: CreateTaFormValues) => {
+    const createTaResponse = await createTaAction(values);
 
-    if (!createInstructorResponse.success) {
-      for (const error of createInstructorResponse.errors) {
+    if (!createTaResponse.success) {
+      for (const error of createTaResponse.errors) {
         toast.error(error.message);
       }
       return;
     }
 
-    toast.success("Instructor created successfully!");
-    router.push(`/instructors`);
+    toast.success("Teaching Assistant created successfully!");
+    router.push(`/tas`);
   };
 
   return (
     <>
       <div className="w-full flex">
-        <h1>
-          {tt(locale, {
-            en: "Create Instructor",
-            ar: "إنشاء دكتور",
-          })}
-        </h1>
+        <h1></h1>
       </div>
+      <PageHeader
+        title={tt(locale, {
+          en: "Create Teaching Assistant",
+          ar: "إنشاء معيد",
+        })}
+        actions={[]}
+      />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -94,8 +91,8 @@ export default function CreateInstructorForm({
               ar: "اختر قسمًا",
             })}
           </option>
-          {departments.map((department) => (
-            <option key={department.id} value={department._id}>
+          {departments.map((department, index) => (
+            <option key={index} value={department.code}>
               {tt(locale, department.name)}
             </option>
           ))}
@@ -112,8 +109,8 @@ export default function CreateInstructorForm({
         <div className="flex justify-center items-center">
           <Button type="submit" disabled={isSubmitting}>
             {tt(locale, {
-              en: "Create Instructor",
-              ar: "إنشاء دكتور",
+              en: "Create Teaching Assistant",
+              ar: "إنشاء معيد",
             })}
           </Button>
         </div>

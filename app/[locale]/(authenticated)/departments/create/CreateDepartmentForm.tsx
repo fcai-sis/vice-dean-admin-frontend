@@ -5,6 +5,9 @@ import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { createDepartmentAction } from "../actions";
+import { Button } from "@/components/Buttons";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
 
 const createDepartmentFormSchema = z.object({
   name: z.object({
@@ -16,9 +19,12 @@ const createDepartmentFormSchema = z.object({
   capacity: z.number(),
 });
 
-export type CreateDepartmentFormValues = z.infer<typeof createDepartmentFormSchema>;
+export type CreateDepartmentFormValues = z.infer<
+  typeof createDepartmentFormSchema
+>;
 
 export default function CreateDepartmentForm() {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -47,37 +53,42 @@ export default function CreateDepartmentForm() {
 
   return (
     <>
-      <h1>Create Department</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="rounded-lg p-4 bg-white shadow-md"
+      >
+        <h1>Create Department</h1>
         <label>Department Name</label>
         <input
-          type='text'
-          placeholder='English name'
+          type="text"
+          placeholder="English name"
           {...register("name.en")}
         />
         {errors.name?.en && <p>{errors.name.en.message}</p>}
-        <input type='text' placeholder='Arabic name' {...register("name.ar")} />
+        <input type="text" placeholder="Arabic name" {...register("name.ar")} />
         {errors.name?.ar && <p>{errors.name.ar.message}</p>}
         <label>Code</label>
-        <input type='text' placeholder='Code' {...register("code")} />
+        <input type="text" placeholder="Code" {...register("code")} />
         {errors.code && <p>{errors.code.message}</p>}
         <label>Program</label>
         <select {...register("program")}>
-          <option value='GENERAL'>General</option>
-          <option value='SPECIAL'>Special</option>
+          <option value="GENERAL">General</option>
+          <option value="SPECIAL">Special</option>
         </select>
         <label>Capacity</label>
         <input
-          type='number'
-          placeholder='Capacity'
+          type="number"
+          placeholder="Capacity"
           {...register("capacity", { valueAsNumber: true })}
         />
         {errors.capacity && <p>{errors.capacity.message}</p>}
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
-          {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        <Button type="submit" disabled={isSubmitting}>
+          {tt(locale, {
+            en: "Create Department",
+            ar: "إنشاء قسم",
+          })}
+        </Button>
       </form>
     </>
   );

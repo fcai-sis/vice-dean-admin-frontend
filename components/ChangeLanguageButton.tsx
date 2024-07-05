@@ -3,7 +3,7 @@
 import { Language } from "iconoir-react";
 import { useChangeLocale, useCurrentLocale } from "../locales/client";
 import { ComponentProps } from "react";
-import { cn } from "@/lib";
+import { Button } from "./Buttons";
 
 export default function ChangeLanguageButton({
   className,
@@ -15,15 +15,13 @@ export default function ChangeLanguageButton({
 
   return (
     <>
-      <button
+      <Button
+        variant="light"
         onClick={() => changeLocale(to)}
-        className={cn(
-          `rounded-lg cursor-pointer bg-white hover:bg-slate-100 transition-colors duration-300 p-2 flex gap-2 items-center justify-center`,
-          className
-        )}
+        className={className}
       >
         <Language />
-      </button>
+      </Button>
     </>
   );
 }

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { deleteInstructorTeachingAction } from "./actions";
+import { Button } from "@/components/Buttons";
 
 const deleteInstructorTeachingFormSchema = z.object({
   instructorTeachingId: z.string(),
@@ -35,7 +36,10 @@ export default function DeleteInstructorTeachingForm({
       await deleteInstructorTeachingAction(values);
 
     if (!deleteInstructorTeachingResponse.success) {
-      return toast.error(deleteInstructorTeachingResponse.error?.message);
+      for (const error of deleteInstructorTeachingResponse.errors) {
+        toast.error(error.message);
+      }
+      return;
     }
 
     toast.success("Instructor teaching deleted");
@@ -45,9 +49,9 @@ export default function DeleteInstructorTeachingForm({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Deleting..." : "Delete"}
-        </button>
+        </Button>
       </form>
     </>
   );

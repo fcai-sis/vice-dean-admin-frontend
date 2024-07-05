@@ -1,22 +1,21 @@
-import { departmentsAPI, instructorsAPI } from "@/api";
+import { departmentsAPI, tasAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
 import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
-import DeleteInstructorForm from "./DeleteInstructorForm";
-import { getCurrentLocale } from "@/locales/server";
+import DeleteTaForm from "./DeleteTaForm";
 import { DepartmentChip } from "@/components/AnnouncementCard";
 import { CardGrid, FilterBar, PageHeader } from "@/components/PageBuilder";
+import { getCurrentLocale } from "@/locales/server";
 import { ButtonLink } from "@/components/Buttons";
-import Card from "@/components/Card";
 
-export const getInstructors = async (
+export const getTeachingAssistants = async (
   page: number,
   department: DepartmentType
 ) => {
   const accessToken = await getAccessToken();
-  const response = await instructorsAPI.get(`/`, {
+  const response = await tasAPI.get(`/`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -27,11 +26,10 @@ export const getInstructors = async (
     },
   });
 
-  console.log(response.data);
+  if (response.status !== 200)
+    throw new Error("Failed to fetch teaching assistants");
 
-  if (response.status !== 200) throw new Error("Failed to fetch instructors");
-
-  revalidatePath("/instructors");
+  revalidatePath("/tas");
 
   return response.data;
 };
@@ -55,14 +53,16 @@ export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string; department: string } }>) {
   const locale = getCurrentLocale();
+
   const page = getCurrentPage(searchParams);
 
   const departmentSelected =
     searchParams.department as unknown as DepartmentType;
 
-  const response = await getInstructors(page, departmentSelected);
-  const instructors = response.instructors;
-  const total = response.totalInstructors;
+  const { teachingAssistants: tas } = await getTeachingAssistants(
+    page,
+    departmentSelected
+  );
 
   const departmentResponse = await getDepartments();
   const departments = departmentResponse.departments;
@@ -85,15 +85,12 @@ export default async function Page({
     <>
       <PageHeader
         title={tt(locale, {
-          en: "Instructors",
-          ar: "الدكاترة",
+          en: "Teaching Assistants",
+          ar: "المعيدين",
         })}
         actions={
-          <ButtonLink variant="primary" href="/instructors/create">
-            {tt(locale, {
-              en: "Add Instructor",
-              ar: "إضافة دكتور",
-            })}
+          <ButtonLink variant="primary" href={`/tas/create`}>
+            {tt(locale, { en: "Create TA", ar: "إنشاء معيد" })}
           </ButtonLink>
         }
       />
@@ -114,27 +111,27 @@ export default async function Page({
       />
 
       <CardGrid>
-        {instructors.map((instructor: any) => (
-          <InstructorCard key={instructor._id} instructor={instructor} />
+        {tas.map((ta: any) => (
+          <TaCard key={ta._id} ta={ta} />
         ))}
       </CardGrid>
 
-      <Pagination totalPages={total / limit} />
+      <Pagination totalPages={tas.length / limit} />
     </>
   );
 }
 
-type InstructorCardProps = { instructor: any };
-function InstructorCard({ instructor }: InstructorCardProps) {
+type TaCardProps = { ta: any };
+function TaCard({ ta }: TaCardProps) {
   return (
-    <Card>
-      <h3 className="text-slate-600">{instructor.fullName}</h3>
-      <p className="text-slate-400">{instructor.email}</p>
+    <div className="flex flex-col border border-slate-200 w-96 rounded-lg p-4 gap-4">
+      <h3 className="text-slate-600">{ta.fullName}</h3>
+      <p className="text-slate-400">{ta.email}</p>
       <div className="flex justify-start">
-        <DepartmentChip department={instructor.department} />
+        <DepartmentChip department={ta.department} />
       </div>
-      {instructor.officeHours && <p>{instructor.officeHours}</p>}
-      <DeleteInstructorForm instructorId={instructor._id} />
-    </Card>
+      {ta.officeHours && <p>{ta.officeHours}</p>}
+      <DeleteTaForm taId={ta._id} />
+    </div>
   );
 }

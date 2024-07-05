@@ -1,11 +1,10 @@
 "use client";
 
-import { Menu, NavArrowDown } from "iconoir-react";
-import { PropsWithChildren, useState } from "react";
+import { NavArrowDown } from "iconoir-react";
+import { ComponentProps, useState } from "react";
+import { Button } from "./Buttons";
 
-export type DropdownProps = PropsWithChildren<{
-  label: string;
-}>;
+export type DropdownProps = ComponentProps<"div"> & { label: string };
 export default function Dropdown({ label, children }: DropdownProps) {
   const [show, setShow] = useState(false);
 
@@ -15,13 +14,10 @@ export default function Dropdown({ label, children }: DropdownProps) {
 
   return (
     <div className="relative">
-      <button
-        className="p-2 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors duration-300 flex gap-2"
-        onClick={handleButtonClick}
-      >
+      <Button variant="light" onClick={handleButtonClick}>
         {label}
         <NavArrowDown />
-      </button>
+      </Button>
       <div
         className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg bg-white shadow-lg ${
           show ? "" : "hidden"

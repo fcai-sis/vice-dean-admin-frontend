@@ -103,9 +103,9 @@ export default function CreateSectionForm({
         <input {...register("group")} />
         {errors.group && <p>{errors.group.message}</p>}
 
-        <button className='btn' type='submit' disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        </Button>
       </form>
     </>
   );

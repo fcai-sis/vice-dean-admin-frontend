@@ -7,6 +7,7 @@ import { z } from "zod";
 import { useCurrentLocale } from "@/locales/client";
 import { tt } from "@/lib";
 import { createLectureAction } from "../actions";
+import { Button } from "@/components/Buttons";
 
 const createLectureFormSchema = z.object({
   course: z.string(),
@@ -92,9 +93,9 @@ export default function CreateLectureForm({
         </select>
         {errors.slot && <p>{errors.slot.message}</p>}
 
-        <button className="btn" type="submit" disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting" : "Submit"}
-        </button>
+        </Button>
       </form>
     </>
   );

@@ -45,37 +45,37 @@ export default function UpdateConfigForm({ config }: { config: any }) {
       <h2>Update Configuration Settings</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className='form-group'>
+        <div className="form-group">
           <label>Allow Course Enrollments?</label>
           <input
-            type='checkbox'
+            type="checkbox"
             {...register("isCourseEnrollOpen")}
             defaultChecked={config.isCourseEnrollOpen}
           />
         </div>
 
-        <div className='form-group'>
+        <div className="form-group">
           <label>Allow Department Enrollments?</label>
           <input
-            type='checkbox'
+            type="checkbox"
             {...register("isDepartmentEnrollOpen")}
             defaultChecked={config.isDepartmentEnrollOpen}
           />
         </div>
 
-        <div className='form-group'>
+        <div className="form-group">
           <label>Allow Graduation Project Registration?</label>
           <input
-            type='checkbox'
+            type="checkbox"
             {...register("isGradProjectRegisterOpen")}
             defaultChecked={config.isGradProjectRegisterOpen}
           />
         </div>
 
-        <div className='flex justify-center'>
-          <button className='btn' type='submit' disabled={isSubmitting}>
+        <div className="flex justify-center">
+          <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Updating..." : "Update"}
-          </button>
+          </Button>
         </div>
       </form>
     </>

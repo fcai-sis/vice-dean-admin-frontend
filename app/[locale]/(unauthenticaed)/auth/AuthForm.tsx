@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { useCurrentLocale } from "@/locales/client";
 import { tt } from "@/lib";
 import Spinner from "@/components/Spinner";
+import { Button } from "@/components/Buttons";
 
 const authFormSchema = z.object({
   username: z.string(),
@@ -78,7 +79,7 @@ export default function AuthForm() {
           <input {...register("password")} type="password" />
         </div>
       </div>
-      <button className="btn" type="submit" disabled={formState.isSubmitting}>
+      <Button type="submit" disabled={formState.isSubmitting}>
         {formState.isSubmitting ? (
           <Spinner />
         ) : (
@@ -87,7 +88,7 @@ export default function AuthForm() {
             en: "Sign in",
           })
         )}
-      </button>
+      </Button>
     </form>
   );
 }
