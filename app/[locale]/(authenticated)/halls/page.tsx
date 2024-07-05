@@ -71,15 +71,26 @@ export function HallCard({ hall }: Readonly<{ hall: any }>) {
   const locale = getCurrentLocale();
   return (
     <Card>
-      <h3>{tt(locale, hall.name)}</h3>
-      <p className="text-slate-400">
-        {tt(locale, {
-          en: "Capacity",
-          ar: "السعة",
-        })}
-        :{hall.capacity}
-      </p>
-      <DeleteHallForm hallId={hall._id} />
+      <div>
+        <h3>{tt(locale, hall.name)}</h3>
+        <p className="text-slate-400">
+          {tt(locale, {
+            en: "Capacity",
+            ar: "السعة",
+          })}
+          {": "}
+          {hall.capacity}
+        </p>
+      </div>
+      <div className="flex gap-4">
+        <ButtonLink href={`/halls/${hall._id}`}>
+          {tt(locale, {
+            en: "Edit",
+            ar: "تعديل",
+          })}
+        </ButtonLink>
+        <DeleteHallForm hallId={hall._id} />
+      </div>
     </Card>
   );
 }

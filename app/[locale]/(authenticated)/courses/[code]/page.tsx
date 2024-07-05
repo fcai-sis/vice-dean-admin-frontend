@@ -1,6 +1,9 @@
 import { coursesAPI } from "@/api";
-import { getAccessToken } from "@/lib";
+import { getAccessToken, tt } from "@/lib";
 import { revalidatePath } from "next/cache";
+import UpdateCourseForm from "./UpdateCourseForm";
+import { getAllCourses } from "../../semester/create/page";
+import { getAllDepartments } from "../../bylaw/create/page";
 
 export const getSelectedCourse = async (code: string) => {
   const accessToken = await getAccessToken();
@@ -23,12 +26,16 @@ export default async function Page({
 }: Readonly<{
   params: { code: string };
 }>) {
-  const response = await getSelectedCourse(code);
-  const course = response.course;
+  const { course } = await getSelectedCourse(code);
+  const { departments } = await getAllDepartments();
+  const { courses: allCourses } = await getAllCourses();
   return (
     <>
-      <h1>{course.name.en}</h1>
-      <p>{course.description.en}</p>
+      <UpdateCourseForm
+        course={course}
+        allDepartments={departments}
+        allCourses={allCourses.filter((c: any) => c.code !== course.code)}
+      />
     </>
   );
 }

@@ -9,10 +9,10 @@ import { Button } from "@/components/Buttons";
 import { tt } from "@/lib";
 import { useCurrentLocale } from "@/locales/client";
 import Spinner from "@/components/Spinner";
+import { updateCourseAction } from "./actions";
 import { useState } from "react";
-import { createCourseAction } from "./actions";
 
-const createCourseFormSchema = z.object({
+const deleteCourseFormSchema = z.object({
   code: z.string(),
   name: z.object({
     en: z.string(),
@@ -28,21 +28,25 @@ const createCourseFormSchema = z.object({
   prerequisites: z.array(z.object({ prerequisite: z.string() })),
 });
 
-export type CreateCourseFormValues = z.infer<typeof createCourseFormSchema>;
+export type UpdateCourseFormValues = z.infer<typeof deleteCourseFormSchema>;
 
-export default function CreateCourseForm({
+export default function UpdateCourseForm({
+  course,
   allDepartments,
   allCourses,
 }: {
+  course: any;
   allDepartments: any[];
   allCourses: any[];
 }) {
   const locale = useCurrentLocale();
   const router = useRouter();
 
-  const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>(
+    course.departments.map((department: any) => department.code)
+  );
   const [selectedPrerequisites, setSelectedPrerequisites] = useState<string[]>(
-    []
+    course.prerequisites.map((prerequisite: any) => prerequisite.code)
   );
 
   const {
@@ -50,22 +54,18 @@ export default function CreateCourseForm({
     control,
     register,
     formState: { errors, isSubmitting },
-  } = useForm<CreateCourseFormValues>({
-    resolver: zodResolver(createCourseFormSchema),
+  } = useForm<UpdateCourseFormValues>({
+    resolver: zodResolver(deleteCourseFormSchema),
     defaultValues: {
-      code: "",
-      name: {
-        en: "",
-        ar: "",
-      },
-      description: {
-        en: "",
-        ar: "",
-      },
-      courseType: "MANDATORY",
-      creditHours: 0,
-      departments: [],
-      prerequisites: [],
+      code: course.code,
+      name: course.name,
+      description: course.description,
+      courseType: course.courseType,
+      creditHours: course.creditHours,
+      departments: course.departments.map((department: any) => department.code),
+      prerequisites: course.prerequisites.map(
+        (prerequisite: any) => prerequisite.code
+      ),
     },
   });
 
@@ -115,10 +115,10 @@ export default function CreateCourseForm({
     removePrerequisite(index);
   };
 
-  const onSubmit = async (values: CreateCourseFormValues) => {
+  const onSubmit = async (values: UpdateCourseFormValues) => {
     console.log(values);
 
-    const response = await createCourseAction(values);
+    const response = await updateCourseAction(values);
 
     if (!response.success) {
       console.log(response);
@@ -131,8 +131,8 @@ export default function CreateCourseForm({
 
     toast.success(
       tt(locale, {
-        en: "Course Created successfully",
-        ar: "تم إنشاء المقرر بنجاح",
+        en: "Course updated successfully",
+        ar: "تم تحديث المقرر بنجاح",
       })
     );
 
@@ -148,13 +148,13 @@ export default function CreateCourseForm({
         <div className="flex gap-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <label htmlFor="code">
+              <p>
                 {tt(locale, {
-                  en: "Code",
-                  ar: "الرمز",
+                  en: "Course Code",
+                  ar: "كود المقرر",
                 })}
-              </label>
-              <input type="text" id="code" {...register("code")} />
+              </p>
+              {<p className="text-slate-500">{course.code}</p>}
               <label htmlFor="name.en">
                 {tt(locale, {
                   en: "Name (English)",
@@ -231,6 +231,7 @@ export default function CreateCourseForm({
               <select
                 id="courseType"
                 {...register("courseType")}
+                defaultValue={course.courseType}
                 className={errors.courseType ? "border-red-500" : ""}
               >
                 <option value="MANDATORY">
@@ -284,11 +285,6 @@ export default function CreateCourseForm({
               </label>
               {prerequisitesFields.map((field, index) => (
                 <div key={field.id} className="flex gap-4">
-                  <span className="text-red-500">
-                    {errors.prerequisites &&
-                      errors.prerequisites[index]?.prerequisite?.message}
-                  </span>
-
                   <select
                     {...register(
                       `prerequisites.${index}.prerequisite` as const
@@ -322,6 +318,12 @@ export default function CreateCourseForm({
                         </option>
                       ))}
                   </select>
+
+                  <span className="text-red-500">
+                    {errors.prerequisites &&
+                      errors.prerequisites[index]?.prerequisite?.message}
+                  </span>
+
                   <Button
                     variant="danger"
                     onClick={() => handleRemovePrerequisite(index)}

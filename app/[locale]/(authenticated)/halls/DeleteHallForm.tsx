@@ -44,8 +44,8 @@ export default function DeleteHallForm({ hallId }: { hallId: string }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Button variant="danger" type="submit" disabled={isSubmitting}>
           {tt(locale, {
-            en: "Delete Hall",
-            ar: "حذف القاعة",
+            en: "Delete",
+            ar: "حذف",
           })}
         </Button>
       </form>

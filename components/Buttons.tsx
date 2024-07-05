@@ -18,10 +18,14 @@ export type Varianted = {
 export type ButtonProps = Varianted & ComponentProps<"button">;
 
 export function Button(props: ButtonProps) {
-  let css = "rounded-lg px-4 py-2 flex gap-2";
+  let css = "rounded-lg px-4 py-2 flex gap-2 w-min text-nowrap";
   css = variantCss(css, props.variant ?? "primary");
   return (
-    <button {...props} className={cn(css, props.className)}>
+    <button
+      {...props}
+      type={props.type ?? "button"}
+      className={cn(css, props.className)}
+    >
       {props.children}
     </button>
   );
@@ -30,7 +34,7 @@ export function Button(props: ButtonProps) {
 export type ButtonLinkProps = Varianted &
   ComponentProps<"a"> & { href: string };
 export function ButtonLink(props: ButtonLinkProps) {
-  let css = "rounded-lg px-4 py-2 flex gap-2";
+  let css = "rounded-lg px-4 py-2 flex gap-2 w-min text-nowrap";
   css = variantCss(css, props.variant ?? "primary");
   return (
     <Link {...props} className={cn(css, props.className)}>

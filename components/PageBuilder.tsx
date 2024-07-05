@@ -35,5 +35,5 @@ export function PageHeader({ title, actions }: PageHeaderProps) {
 
 export type CardGridProps = PropsWithChildren;
 export function CardGrid({ children }: CardGridProps) {
-  return <div className="grid grid-cols-3 gap-4">{children}</div>;
+  return <div className="w-full flex flex-wrap gap-4">{children}</div>;
 }

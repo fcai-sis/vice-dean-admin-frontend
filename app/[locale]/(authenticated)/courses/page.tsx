@@ -4,13 +4,14 @@ import { SelectFilter } from "@/components/SetQueryFilter";
 import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
 import DeleteCourseForm from "./DeleteCourseForm";
 import { CardGrid, FilterBar, PageHeader } from "@/components/PageBuilder";
 import { getCurrentLocale } from "@/locales/server";
 import { ButtonLink } from "@/components/Buttons";
 import Card from "@/components/Card";
 import { DepartmentChip } from "@/components/AnnouncementCard";
+import { EditPencil } from "iconoir-react";
+import { CodeChip } from "../departments/page";
 
 export const getCourses = async (page: number, department: DepartmentType) => {
   const accessToken = await getAccessToken();
@@ -120,21 +121,23 @@ function CourseCard({ course }: { course: any }) {
   const locale = getCurrentLocale();
   return (
     <Card>
-      <h3>{tt(locale, course.name)}</h3>
-      <p>{course.code}</p>
+      <div className="flex flex-col">
+        <h3>{tt(locale, course.name)}</h3>
+        <CodeChip code={course.code} />
+      </div>
       <div className="flex gap-2">
         {course.departments?.map((department: any) => (
           <DepartmentChip key={department.code} department={department} />
         ))}
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-end">
         <ButtonLink href={`/courses/${course.code}`}>
           {tt(locale, {
-            en: "View",
-            ar: "عرض",
+            en: "Edit",
+            ar: "تعديل",
           })}
         </ButtonLink>
-        <DeleteCourseForm courseId={course._id} />
+        <DeleteCourseForm code={course.code} />
       </div>
     </Card>
   );

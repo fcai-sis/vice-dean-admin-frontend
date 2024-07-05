@@ -1,15 +1,11 @@
-import { hallSlotAPI } from "@/api";
-import Pagination from "@/components/Pagination";
-import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
-import { revalidatePath } from "next/cache";
-import Link from "next/link";
-import DeleteSlotForm from "./DeleteSlotForm";
+import { slotsAPI } from "@/api";
 import Schedule from "@/components/Schedule";
 import { PageHeader } from "@/components/PageBuilder";
 import { getCurrentLocale } from "@/locales/server";
+import { tt } from "@/lib";
 
 export const getSlots = async () => {
-  const { data } = await hallSlotAPI.get("/slot");
+  const { data } = await slotsAPI.get("/");
   return data;
 };
 

@@ -1,11 +1,13 @@
 "use server";
 import { getAccessToken } from "@/lib";
-import { departmentsAPI, hallSlotAPI } from "@/api";
+import { departmentsAPI } from "@/api";
 import { revalidatePath } from "next/cache";
 import { CreateDepartmentFormValues } from "./create/CreateDepartmentForm";
 import { deleteDepartmentFormValues } from "./DeleteDepartmentForm";
 
-export const createDepartmentAction = async (data: CreateDepartmentFormValues) => {
+export const createDepartmentAction = async (
+  data: CreateDepartmentFormValues
+) => {
   const accessToken = await getAccessToken();
 
   const requestBody = {
@@ -16,6 +18,7 @@ export const createDepartmentAction = async (data: CreateDepartmentFormValues) =
       capacity: data.capacity,
     },
   };
+
   console.log(requestBody);
 
   const response = await departmentsAPI.post(`/`, requestBody, {
@@ -28,11 +31,7 @@ export const createDepartmentAction = async (data: CreateDepartmentFormValues) =
   if (response.status !== 201) {
     return {
       success: false,
-      error: {
-        message: response.data.errors
-          .map((error: any) => error.message)
-          .join(", "),
-      },
+      ...response.data,
     };
   }
 
@@ -41,26 +40,25 @@ export const createDepartmentAction = async (data: CreateDepartmentFormValues) =
   return { success: true };
 };
 
-export const deleteDepartmentAction = async (data: deleteDepartmentFormValues) => {
+export const deleteDepartmentAction = async (
+  data: deleteDepartmentFormValues
+) => {
   const accessToken = await getAccessToken();
 
-  const departmentId = data.departmentId;
+  const code = data.code;
 
-  const response = await departmentsAPI.delete(`${departmentId}`, {
+  const response = await departmentsAPI.delete(`/${code}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+
   console.log(response.data);
 
-  if (response.status !== 200) {
+  if (response.status !== 204) {
     return {
       success: false,
-      error: {
-        message: response.data.errors
-          .map((error: any) => error.message)
-          .join(", "),
-      },
+      ...response.data,
     };
   }
 

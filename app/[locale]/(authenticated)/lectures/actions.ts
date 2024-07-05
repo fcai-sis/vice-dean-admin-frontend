@@ -25,9 +25,7 @@ export const createLectureAction = async (data: CreateLectureFormValues) => {
 
     return {
       success: false,
-      error: {
-        message: response.data.error.message,
-      },
+      ...response.data,
     };
   }
 

@@ -5,7 +5,7 @@ import { createSlotAction } from "../actions";
 import { Plus } from "iconoir-react";
 import { tt } from "@/lib";
 import { useCurrentLocale } from "@/locales/client";
-import { Component, ComponentProps, useEffect, useState } from "react";
+import { ComponentProps, useEffect, useState } from "react";
 import { Button } from "@/components/Buttons";
 
 const DayEnum = [

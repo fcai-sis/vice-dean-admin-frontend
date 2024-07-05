@@ -4,19 +4,20 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { deleteCourseAction } from "./actions";
 import { Button } from "@/components/Buttons";
 import { tt } from "@/lib";
 import { useCurrentLocale } from "@/locales/client";
 import Spinner from "@/components/Spinner";
+import { Trash } from "iconoir-react";
+import { deleteCourseAction } from "./actions";
 
 const deleteCourseFormSchema = z.object({
-  courseId: z.string(),
+  code: z.string(),
 });
 
 export type deleteCourseFormValues = z.infer<typeof deleteCourseFormSchema>;
 
-export default function DeleteCourseForm({ courseId }: { courseId: string }) {
+export default function DeleteCourseForm({ code }: { code: string }) {
   const locale = useCurrentLocale();
   const router = useRouter();
   const {
@@ -25,7 +26,7 @@ export default function DeleteCourseForm({ courseId }: { courseId: string }) {
   } = useForm<deleteCourseFormValues>({
     resolver: zodResolver(deleteCourseFormSchema),
     defaultValues: {
-      courseId: courseId,
+      code: code,
     },
   });
 
@@ -33,10 +34,18 @@ export default function DeleteCourseForm({ courseId }: { courseId: string }) {
     const deleteCourseResponse = await deleteCourseAction(values);
 
     if (!deleteCourseResponse.success) {
-      return toast.error(deleteCourseResponse.error?.message);
+      for (const error of deleteCourseResponse.errors) {
+        toast.error(error.message);
+      }
+      return;
     }
 
-    toast.success("Course deleted");
+    toast.success(
+      tt(locale, {
+        en: "Course deleted successfully",
+        ar: "تم حذف المقرر بنجاح",
+      })
+    );
     router.push(`/courses`);
   };
 
@@ -47,10 +56,7 @@ export default function DeleteCourseForm({ courseId }: { courseId: string }) {
           {isSubmitting ? (
             <Spinner />
           ) : (
-            tt(locale, {
-              en: "Delete",
-              ar: "حذف",
-            })
+            <>{tt(locale, { en: "Delete", ar: "حذف" })}</>
           )}
         </Button>
       </form>

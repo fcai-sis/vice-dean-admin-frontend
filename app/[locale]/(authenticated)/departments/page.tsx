@@ -3,7 +3,6 @@ import Pagination from "@/components/Pagination";
 import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
 import { getCurrentLocale } from "@/locales/server";
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
 import DeleteDepartmentForm from "./DeleteDepartmentForm";
 import { CardGrid, PageHeader } from "@/components/PageBuilder";
 import { ButtonLink } from "@/components/Buttons";
@@ -67,9 +66,21 @@ export default async function Page({
 function DepartmentCard({ department }: { department: any }) {
   return (
     <Card>
-      <h3>{tt(getCurrentLocale(), department.name)}</h3>
-      <p>{department.code}</p>
-      <DeleteDepartmentForm departmentId={department._id} />
+      <div className="flex flex-col">
+        <h3>{tt(getCurrentLocale(), department.name)}</h3>
+        <CodeChip code={department.code} />
+      </div>
+      <div className="w-full flex justify-end">
+        <DeleteDepartmentForm code={department.code} />
+      </div>
     </Card>
+  );
+}
+
+export function CodeChip({ code }: { code: string }) {
+  return (
+    <span className="bg-slate-100 text-slate-400 rounded-lg px-2 py-1 w-min">
+      {code}
+    </span>
   );
 }

@@ -1,6 +1,6 @@
 "use server";
 import { getAccessToken } from "@/lib";
-import { hallSlotAPI } from "@/api";
+import { hallsAPI, hallSlotAPI } from "@/api";
 import { revalidatePath } from "next/cache";
 import { CreateHallFormValues } from "./create/CreateHallForm";
 import { deleteHallFormValues } from "./DeleteHallForm";
@@ -16,7 +16,7 @@ export const createHallAction = async (data: CreateHallFormValues) => {
   };
   console.log(requestBody);
 
-  const response = await hallSlotAPI.post(`/hall`, requestBody, {
+  const response = await hallsAPI.post(`/`, requestBody, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
