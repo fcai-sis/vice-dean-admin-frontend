@@ -1,16 +1,14 @@
 import { semesterAPI } from "@/api";
 import { getAccessToken, tt } from "@/lib";
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
 import EndSemesterForm from "./EndSemesterForm";
 import BeginDepartmentAssignment from "./BeginDepartmentAssignment";
 import { redirect } from "next/navigation";
 import { CardGrid, PageHeader } from "@/components/PageBuilder";
 import { getCurrentLocale } from "@/locales/server";
 import { ButtonLink } from "@/components/Buttons";
-import Card from "@/components/Card";
 import { CodeChip } from "../departments/page";
-import { DepartmentChip } from "@/components/AnnouncementCard";
+import Card from "@/components/Card";
 
 export const getLatestSemester = async () => {
   const accessToken = await getAccessToken();
