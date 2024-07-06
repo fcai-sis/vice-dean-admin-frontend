@@ -1,7 +1,13 @@
 import { departmentsAPI, instructorsAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
+import {
+  getAccessToken,
+  getCurrentPage,
+  limit,
+  localizedTitle,
+  tt,
+} from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
 import DeleteInstructorForm from "./DeleteInstructorForm";
@@ -128,7 +134,12 @@ type InstructorCardProps = { instructor: any };
 function InstructorCard({ instructor }: InstructorCardProps) {
   return (
     <Card>
-      <h3 className="text-slate-600">{instructor.fullName}</h3>
+      <div className="flex flex-col gap-2">
+        <h3 className="text-slate-600">{instructor.fullName}</h3>
+        <p className="text-slate-400">
+          {tt(getCurrentLocale(), localizedTitle(instructor.title))}
+        </p>
+      </div>
       <p className="text-slate-400">{instructor.email}</p>
       <div className="flex justify-start">
         <DepartmentChip department={instructor.department} />

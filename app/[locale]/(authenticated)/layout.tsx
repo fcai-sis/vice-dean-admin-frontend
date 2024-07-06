@@ -12,7 +12,7 @@ export default async function Layout({
   return (
     <>
       <Navbar locale={locale} />
-      <div className="w-full h-full flex flex-col items-center justify-start p-32">
+      <div className="w-full h-full flex flex-col items-start justify-start p-32">
         {children}
       </div>
     </>

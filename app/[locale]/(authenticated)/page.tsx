@@ -104,7 +104,7 @@ export default function Page() {
       : charts.filter((chart) => chart.id === selectedChart);
 
   return (
-    <div className='min-h-screen bg-gray-100 p-8 overflow-auto'>
+    <div className="min-h-screen bg-gray-100 p-8 overflow-auto">
       <PageHeader
         title={tt(locale, {
           en: "Statistics & Reports",
@@ -112,14 +112,19 @@ export default function Page() {
         })}
         actions={[]}
       />
-      <div className='mb-4'>
-        <label className='block mb-2'>Select chart to display:</label>
+      <div className="mb-4">
+        <label className="block mb-2">
+          {tt(locale, {
+            en: "Select Chart",
+            ar: "اختر الرسم البياني",
+          })}
+        </label>
         <select
-          className='w-full p-2 border border-gray-300 rounded'
+          className="w-full p-2 border border-gray-300 rounded"
           value={selectedChart}
           onChange={handleSelectChange}
         >
-          <option value='all'>All</option>
+          <option value="all">All</option>
           {charts.map((chart) => (
             <option key={chart.id} value={chart.id}>
               {chart.label}
@@ -127,7 +132,7 @@ export default function Page() {
           ))}
         </select>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-8 mt-8'>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
         {displayedCharts.map((chart) => (
           <div key={chart.id}>{chart.component}</div>
         ))}

@@ -102,7 +102,7 @@ export default async function Page({
 
               <p>
                 <b>Course: </b>
-                {teaching.course.code}
+                {teaching.course.course.code}
               </p>
 
               <DeleteInstructorTeachingForm

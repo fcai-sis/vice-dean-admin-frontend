@@ -242,6 +242,7 @@ export default function UpdateCourseForm({
                 id="courseType"
                 {...register("courseType")}
                 className={errors.courseType ? "border-red-500" : ""}
+                defaultValue={course.courseType}
               >
                 <option value="MANDATORY">
                   {tt(locale, {

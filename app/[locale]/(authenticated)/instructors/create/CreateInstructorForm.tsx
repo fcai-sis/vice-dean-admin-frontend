@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { useCurrentLocale } from "@/locales/client";
-import { tt } from "@/lib";
+import { localizedTitle, TitleEnum, tt } from "@/lib";
 import { createInstructorAction } from "../actions";
 import { Button } from "@/components/Buttons";
 
@@ -15,6 +15,7 @@ const createInstructorFormSchema = z.object({
   email: z.string().email(),
   department: z.string(),
   password: z.string(),
+  title: z.enum(TitleEnum),
 });
 
 export type CreateInstructorFormValues = z.infer<
@@ -110,6 +111,25 @@ export default function CreateInstructorForm({
         </label>
         <input type="password" {...register("password")} />
         {errors.password && <p>{errors.password.message}</p>}
+        <label>
+          {tt(locale, {
+            en: "Title",
+            ar: "اللقب",
+          })}
+        </label>
+        <select {...register("title")}>
+          <option disabled selected>
+            {tt(locale, {
+              en: "Select a title",
+              ar: "اختر لقبًا",
+            })}
+          </option>
+          {Object.values(TitleEnum).map((title) => (
+            <option key={title} value={title}>
+              {tt(locale, localizedTitle(title))}
+            </option>
+          ))}
+        </select>
         <div className="flex justify-center items-center">
           <Button type="submit" disabled={isSubmitting}>
             {tt(locale, {

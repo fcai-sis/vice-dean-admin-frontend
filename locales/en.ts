@@ -16,7 +16,7 @@ export default {
     announcements: "Announcements",
     serviceRequests: "Service Requests",
     instructors: "Instructors",
-    teacherAssistants: "Teacher Assistants",
+    teacherAssistants: "Teaching Assistants",
     profile: "Profile",
     more: "More",
     signOut: "Sign Out",
@@ -123,7 +123,7 @@ export default {
   profile: {
     title: "Profile",
   },
-  bylaw:{
+  bylaw: {
     title: "Bylaws",
     create: {
       title: "Create Bylaw",
@@ -134,7 +134,8 @@ export default {
         name: "Bylaw Name",
         gpaScale: "GPA Scale",
         useDetailedHours: "Use Detailed Hours",
-        useDetailedGraduationProjectHours: "Use Detailed Graduation Project Hours",
+        useDetailedGraduationProjectHours:
+          "Use Detailed Graduation Project Hours",
         yearApplied: "Year Applied",
         gradeWeights: "Grade Weights",
         gradeWeight: "Grade Weight",
@@ -152,9 +153,11 @@ export default {
         selectDepartmentCode: "Select Department Code",
         addGraduationProjectRequirements: "Add Graduation Project Requirements",
         graduationRequirement: "Graduation Requirement",
-        graduationRequirementDescription: "Graduation requirement is the minimum credit hours required to graduate.",
+        graduationRequirementDescription:
+          "Graduation requirement is the minimum credit hours required to graduate.",
         coursePassCriteria: "Course Pass Criteria",
-        coursePassCriteriaDescription: "Course pass criteria is the minimum grade required to pass a course.",
+        coursePassCriteriaDescription:
+          "Course pass criteria is the minimum grade required to pass a course.",
         submit: "Submit",
         submitting: "Submitting...",
       },
@@ -163,5 +166,5 @@ export default {
         createFailed: "Failed to create bylaw",
       },
     },
-  }
+  },
 } as const;
