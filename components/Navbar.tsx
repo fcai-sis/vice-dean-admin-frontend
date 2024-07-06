@@ -10,8 +10,9 @@ import {
   Building,
   Calendar,
   Clock,
-  Home,
   StatsReport,
+  User,
+  UserCircle,
 } from "iconoir-react";
 import Image from "next/image";
 import { tt } from "@/lib";
@@ -85,13 +86,16 @@ export default async function Navbar({ locale }: { locale: "en" | "ar" }) {
 
         <I18nProviderClient locale={locale}>
           <Dropdown label={t("nav.more")}>
-            <Link href="/instructors" className="block w-full">
+            <Link href="/instructors" className="flex w-full gap-2">
+              <User />
               {t("nav.instructors")}
             </Link>
-            <Link href="/tas" className="block w-full">
+            <Link href="/tas" className="flex w-full gap-2">
+              <User />
               {t("nav.teacherAssistants")}
             </Link>
-            <Link href="/profile" className="block w-full">
+            <Link href="/profile" className="flex w-full gap-2">
+              <UserCircle />
               {t("profile.title")}
             </Link>
             <SignOutButton />

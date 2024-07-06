@@ -1,10 +1,7 @@
-import { DummyLecture, DummySection } from "@/dummy/schedule";
-import { DummySlot } from "@/dummy/slots";
 import { tt } from "@/lib";
 import { DayEnumType, dayLocalizedEnum } from "@fcai-sis/shared-models";
 import { getCurrentLocale } from "@/locales/server";
 import { DummyHall } from "@/dummy/halls";
-import { Plus } from "iconoir-react";
 import CreateSlotForm, {
   CreateNewTimeRangeSlotForm,
 } from "@/app/[locale]/(authenticated)/slots/create/CreateSlotForm";
@@ -33,7 +30,7 @@ function formatSlotTime(slot: any) {
     .padStart(2, "0")} ${endTimeAmPm}`;
 }
 
-function isSameSlot(slot1: DummySlot, slot2: DummySlot): boolean {
+function isSameSlot(slot1: any, slot2: any): boolean {
   return (
     slot1.day === slot2.day &&
     slot1.start.hour === slot2.start.hour &&
@@ -44,7 +41,7 @@ function isSameSlot(slot1: DummySlot, slot2: DummySlot): boolean {
 }
 
 export type ScheduleProps = {
-  slots: Record<DayEnumType, DummySlot[]>;
+  slots: Record<DayEnumType, any[]>;
   days: { day: DayEnumType }[];
   timeRanges: {
     day: undefined;
@@ -77,9 +74,7 @@ export default function Schedule({
               className="table-cell rounded-lg p-2 bg-slate-50 border border-slate-200 text-center"
               key={JSON.stringify(timeRange)}
             >
-              <p dir="ltr">
-                {formatSlotTime(timeRange as unknown as DummySlot)}
-              </p>
+              <p dir="ltr">{formatSlotTime(timeRange as unknown as any)}</p>
             </div>
           ))}
         </div>
@@ -129,7 +124,7 @@ export default function Schedule({
 }
 
 type LectureSlotProps = Readonly<{
-  lecture: DummyLecture;
+  lecture: any;
   hall: DummyHall;
 }>;
 function LectureSlot({ lecture, hall }: LectureSlotProps) {
@@ -154,7 +149,7 @@ function LectureSlot({ lecture, hall }: LectureSlotProps) {
 }
 
 type SectionSlotProps = Readonly<{
-  section: DummySection;
+  section: any;
   hall: DummyHall;
 }>;
 function SectionSlot({ section, hall }: SectionSlotProps) {

@@ -263,7 +263,7 @@ export async function EntireSchedule({
 
                   return (
                     <div
-                      className="table-cell bg-slate-100 rounded-lg content-center"
+                      className="table-cell bg-slate-50 rounded-lg content-center"
                       key={index}
                     >
                       <CreateLectureOrSectionForm
@@ -281,7 +281,7 @@ export async function EntireSchedule({
                 // map each item to a form based on its type
                 return (
                   <div
-                    className="table-cell bg-slate-100 rounded-lg"
+                    className="table-cell p-2 bg-slate-100 rounded-lg"
                     key={index}
                   >
                     {lectuesAndSectionsInThatDayAndTimeRange.map(
