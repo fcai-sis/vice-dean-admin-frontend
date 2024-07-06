@@ -8,6 +8,9 @@ import { z } from "zod";
 import { useState } from "react";
 import { updateSemesterAction } from "../actions";
 import { Button } from "@/components/Buttons";
+import { PageHeader } from "@/components/PageBuilder";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
 
 const updateSemesterFormSchema = z.object({
   semesterId: z.string(),
@@ -32,6 +35,7 @@ export default function UpdateSemesterForm({
   semester: any;
   setCourses: any[];
 }) {
+  const locale = useCurrentLocale();
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   const router = useRouter();
 
@@ -80,7 +84,13 @@ export default function UpdateSemesterForm({
 
   return (
     <>
-      <h1>Update Latest Semester</h1>
+      <PageHeader
+        title={tt(locale, {
+          en: "Update Semester",
+          ar: "تحديث الفصل",
+        })}
+        actions={[]}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <select {...register("season")} defaultValue={semester.season}>

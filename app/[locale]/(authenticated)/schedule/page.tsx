@@ -45,6 +45,38 @@ export default async function Page({
 }: Readonly<{ searchParams: { page: string } }>) {
   const locale = getCurrentLocale();
 
+  const latestSemester = await SemesterModel.findOne().sort({
+    createdAt: -1,
+  });
+
+  if (!latestSemester) {
+    return (
+      <>
+        <PageHeader
+          title={tt(locale, {
+            en: "Schedule",
+            ar: "الجدول",
+          })}
+          actions={[]}
+        />
+        <div className="flex flex-col justify-center items-center gap-4">
+          <p className="text-center text-slate-400">
+            {tt(locale, {
+              en: "No semester found",
+              ar: "لم يتم العثور على فصل دراسي",
+            })}
+          </p>
+          <ButtonLink href="/semester/create">
+            {tt(locale, {
+              en: "Create semester",
+              ar: "إنشاء فصل دراسي",
+            })}
+          </ButtonLink>
+        </div>
+      </>
+    );
+  }
+
   const { slots, timeRanges, days } = await getSlots();
   const { schedule } = await getEntireSchedule();
 
@@ -62,6 +94,7 @@ export default async function Page({
         schedule={schedule}
         slots={slots}
         timeRanges={timeRanges}
+        latestSemester={latestSemester}
       />
     </>
   );
@@ -137,6 +170,7 @@ export type ScheduleProps = {
     };
   }[];
   schedule: any[];
+  latestSemester: any;
 };
 
 export async function EntireSchedule({
@@ -144,26 +178,29 @@ export async function EntireSchedule({
   timeRanges,
   slots,
   schedule,
+  latestSemester,
 }: ScheduleProps) {
   const locale = getCurrentLocale();
   await dbConnect();
 
   if (timeRanges.length === 0 || days.length === 0) {
     return (
-      <div className="flex flex-col justify-center items-center gap-4">
-        <p className="text-center text-slate-400">
-          {tt(locale, {
-            en: "No slots found",
-            ar: "لم يتم العثور على فترات",
-          })}
-        </p>
-        <ButtonLink href="/slots">
-          {tt(locale, {
-            en: "Create slots",
-            ar: "إنشاء فترات",
-          })}
-        </ButtonLink>
-      </div>
+      <>
+        <div className="flex flex-col justify-center items-center gap-4">
+          <p className="text-center text-slate-400">
+            {tt(locale, {
+              en: "No slots found",
+              ar: "لم يتم العثور على فترات",
+            })}
+          </p>
+          <ButtonLink href="/slots">
+            {tt(locale, {
+              en: "Create slots",
+              ar: "إنشاء فترات",
+            })}
+          </ButtonLink>
+        </div>
+      </>
     );
   }
 
@@ -209,9 +246,6 @@ export async function EntireSchedule({
                 );
 
                 if (lectuesAndSectionsInThatDayAndTimeRange.length === 0) {
-                  const latestSemester = await SemesterModel.findOne().sort({
-                    createdAt: -1,
-                  });
                   const [semesterCourses, halls] = await Promise.all([
                     SemesterCourseModel.find({
                       semester: latestSemester._id,
@@ -271,10 +305,6 @@ export async function EntireSchedule({
                               item.section?.course.code
                           );
 
-                        const latestSemester =
-                          await SemesterModel.findOne().sort({
-                            createdAt: -1,
-                          });
                         const [courses, halls] = await Promise.all([
                           SemesterCourseModel.aggregate([
                             {
