@@ -95,12 +95,20 @@ export default async function Page({
           ar: "الدكاترة",
         })}
         actions={
-          <ButtonLink variant="primary" href="/instructors/create">
-            {tt(locale, {
-              en: "Add Instructor",
-              ar: "إضافة دكتور",
-            })}
-          </ButtonLink>
+          <>
+            <ButtonLink variant="primary" href="/instructors/create">
+              {tt(locale, {
+                en: "Add Instructor",
+                ar: "إضافة دكتور",
+              })}
+            </ButtonLink>
+            <ButtonLink variant="primary" href="/instructors/teachings">
+              {tt(locale, {
+                en: "Teachings",
+                ar: "التدريس",
+              })}
+            </ButtonLink>
+          </>
         }
       />
 

@@ -1,11 +1,15 @@
 import { departmentsAPI, scheduleAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { getAccessToken, getCurrentPage, limit } from "@/lib";
+import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import DeleteInstructorTeachingForm from "./DeleteInstructorTeachingForm";
+import { CardGrid, PageHeader } from "@/components/PageBuilder";
+import { getCurrentLocale } from "@/locales/server";
+import { ButtonLink } from "@/components/Buttons";
+import Card from "@/components/Card";
 
 export const getAllInstructorTeachings = async (
   page: number,
@@ -50,6 +54,7 @@ export const getDepartments = async () => {
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string; department: string } }>) {
+  const locale = getCurrentLocale();
   const page = getCurrentPage(searchParams);
 
   const departmentSelected =
@@ -75,47 +80,50 @@ export default async function Page({
 
   return (
     <>
-      <div>
-        <h1>Instructor Teachings Available</h1>
-        <SelectFilter name="department" options={departmentOptions} />
-        <div>
-          {instructorTeachings.map((teaching: any) => (
-            <div className="border border-black w-80">
+      <PageHeader
+        title={tt(locale, {
+          en: "Instructor Teachings",
+          ar: "تدريس المحاضرين",
+        })}
+        actions={[
+          <ButtonLink variant="primary" href={`/instructors/teachings/create`}>
+            {tt(locale, { en: "Add Teaching", ar: "إضافة تدريس" })}
+          </ButtonLink>,
+        ]}
+      />
+      <SelectFilter name="department" options={departmentOptions} />
+      <CardGrid>
+        {instructorTeachings.map((teaching: any) => (
+          <Card>
+            <p>
+              <b>Name: </b>
+              {teaching.instructor.fullName}
+            </p>
+            <p>
+              <b>Email: </b>
+              {teaching.instructor.email}
+            </p>
+            <p>
+              <b>Department: </b>
+              {teaching.instructor.department.name.en}
+            </p>
+            {teaching.instructor.officeHours && (
               <p>
-                <b>Name: </b>
-                {teaching.instructor.fullName}
+                <b>Office Hours: </b>
+                {teaching.instructor.officeHours}
               </p>
-              <p>
-                <b>Email: </b>
-                {teaching.instructor.email}
-              </p>
-              <p>
-                <b>Department: </b>
-                {teaching.instructor.department.name.en}
-              </p>
-              {teaching.instructor.officeHours && (
-                <p>
-                  <b>Office Hours: </b>
-                  {teaching.instructor.officeHours}
-                </p>
-              )}
+            )}
 
-              <p>
-                <b>Course: </b>
-                {teaching.course.course.code}
-              </p>
+            <p>
+              <b>Course: </b>
+              {teaching.course.code}
+            </p>
 
-              <DeleteInstructorTeachingForm
-                instructorTeachingId={teaching._id}
-              />
-            </div>
-          ))}
-          <Pagination totalPages={total / limit} />
-        </div>
-        <Link href="/instructors/teachings/create">
-          Create Instructor Teaching
-        </Link>
-      </div>
+            <DeleteInstructorTeachingForm instructorTeachingId={teaching._id} />
+          </Card>
+        ))}
+      </CardGrid>
+      <Pagination totalPages={total / limit} />
     </>
   );
 }

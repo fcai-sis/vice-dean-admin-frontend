@@ -1,11 +1,12 @@
 import { departmentsAPI, scheduleAPI } from "@/api";
 import Pagination from "@/components/Pagination";
 import { SelectFilter } from "@/components/SetQueryFilter";
-import { getAccessToken, getCurrentPage, limit } from "@/lib";
+import { getAccessToken, getCurrentPage, limit, tt } from "@/lib";
 import { DepartmentType } from "@fcai-sis/shared-models";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import DeleteTaTeachingForm from "./DeleteTaTeachingForm";
+import { getCurrentLocale } from "@/locales/server";
 
 export const getAllTaTeachings = async (
   page: number,
@@ -50,6 +51,7 @@ export const getDepartments = async () => {
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string; department: string } }>) {
+  const locale = getCurrentLocale();
   const page = getCurrentPage(searchParams);
 
   const departmentSelected =
@@ -75,40 +77,58 @@ export default async function Page({
 
   return (
     <>
-      <div>
-        <h1>TA Teachings Available</h1>
-        <SelectFilter name="department" options={departmentOptions} />
-        <div>
+      <div className="p-6 bg-white text-slate-600">
+        <h1 className="text-2xl font-bold mb-4 ">TA Teachings Available</h1>
+        <div className="mb-6">
+          <SelectFilter
+            name="department"
+            options={departmentOptions}
+            className="border border-slate-400 rounded p-2 w-full"
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {taTeachings.map((teaching: any) => (
-            <div className="border border-black w-80">
-              <p>
-                <b>Name: </b>
+            <div
+              key={teaching._id}
+              className="border border-slate-400 p-4 rounded shadow-lg"
+            >
+              <p className="mb-2">
+                <b className="text-blue-500">Name: </b>
                 {teaching.ta.fullName}
               </p>
-              <p>
-                <b>Email: </b>
+              <p className="mb-2">
+                <b className="text-blue-500">Email: </b>
                 {teaching.ta.email}
               </p>
-              <p>
-                <b>Department: </b>
+              <p className="mb-2">
+                <b className="text-blue-500">Department: </b>
                 {teaching.ta.department.name.en}
               </p>
               {teaching.ta.officeHours && (
-                <p>
-                  <b>Office Hours: </b>
+                <p className="mb-2">
+                  <b className="text-blue-500">Office Hours: </b>
                   {teaching.ta.officeHours}
                 </p>
               )}
-              <p>
-                <b>Course: </b>
+              <p className="mb-4">
+                <b className="text-blue-500">Course: </b>
                 {teaching.course.code}
               </p>
               <DeleteTaTeachingForm taTeachingId={teaching._id} />
             </div>
           ))}
-          <Pagination totalPages={total / limit} />
         </div>
-        <Link href="/tas/teachings/create">Create TA Teaching</Link>
+        <div className="mt-6">
+          <Pagination totalPages={Math.ceil(total / limit)} />
+        </div>
+        <div className="mt-6">
+          <Link href="/tas/teachings/create">
+            {tt(locale, {
+              en: "Add Teaching",
+              ar: "إضافة تدريس",
+            })}
+          </Link>
+        </div>
       </div>
     </>
   );

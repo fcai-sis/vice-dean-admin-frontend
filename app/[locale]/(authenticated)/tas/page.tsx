@@ -89,9 +89,14 @@ export default async function Page({
           ar: "المعيدين",
         })}
         actions={
-          <ButtonLink variant="primary" href={`/tas/create`}>
-            {tt(locale, { en: "Create TA", ar: "إنشاء معيد" })}
-          </ButtonLink>
+          <>
+            <ButtonLink variant="primary" href={`/tas/create`}>
+              {tt(locale, { en: "Create TA", ar: "إنشاء معيد" })}
+            </ButtonLink>
+            <ButtonLink variant="primary" href={`/tas/teachings`}>
+              {tt(locale, { en: "Teachings", ar: "التدريس" })}
+            </ButtonLink>
+          </>
         }
       />
 
