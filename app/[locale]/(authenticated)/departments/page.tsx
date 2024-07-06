@@ -70,7 +70,10 @@ function DepartmentCard({ department }: { department: any }) {
         <h3>{tt(getCurrentLocale(), department.name)}</h3>
         <CodeChip code={department.code} />
       </div>
-      <div className="w-full flex justify-end">
+      <div className="w-full flex justify-end gap-2">
+        <ButtonLink href={`/departments/${department.code}`}>
+          {tt(getCurrentLocale(), { en: "Update", ar: "تحديث" })}
+        </ButtonLink>
         <DeleteDepartmentForm code={department.code} />
       </div>
     </Card>

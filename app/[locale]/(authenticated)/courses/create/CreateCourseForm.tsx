@@ -11,6 +11,7 @@ import { useCurrentLocale } from "@/locales/client";
 import Spinner from "@/components/Spinner";
 import { useState } from "react";
 import { createCourseAction } from "./actions";
+import { PageHeader } from "@/components/PageBuilder";
 
 const createCourseFormSchema = z.object({
   code: z.string(),
@@ -141,51 +142,60 @@ export default function CreateCourseForm({
 
   return (
     <>
+      <PageHeader
+        title={tt(locale, {
+          en: "Create Course",
+          ar: "إنشاء مقرر",
+        })}
+        actions={[]}
+      />
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className='rounded-lg border border-slate-200 bg-white p-4 w-full gap-4 flex flex-col'
+        className="rounded-lg border border-slate-200 bg-white p-4 w-full gap-4 flex flex-col"
       >
-        <div className='flex gap-4'>
-          <div className='flex flex-col gap-4'>
-            <div className='flex flex-col gap-2'>
-              <label htmlFor='code'>
+        <div className="flex gap-4">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="code">
                 {tt(locale, {
                   en: "Code",
                   ar: "الرمز",
                 })}
               </label>
-              <input type='text' id='code' {...register("code")} />
-              <label htmlFor='name.en'>
+              <input type="text" id="code" {...register("code")} />
+              <label htmlFor="name.en">
                 {tt(locale, {
                   en: "Name (English)",
                   ar: "الاسم (إنجليزي)",
                 })}
               </label>
               <input
-                type='text'
-                id='name.en'
+                type="text"
+                id="name.en"
                 {...register("name.en")}
                 className={errors.name?.en ? "border-red-500" : ""}
               />
-              <span className='text-red-500'>{errors.name?.en?.message}</span>
+              <span className="text-red-500">{errors.name?.en?.message}</span>
             </div>
-            <div className='flex flex-col gap-2'>
-              <label htmlFor='name.ar'>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="name.ar">
                 {tt(locale, {
                   en: "Name (Arabic)",
                   ar: "الاسم (عربي)",
                 })}
               </label>
               <input
-                type='text'
-                id='name.ar'
+                type="text"
+                id="name.ar"
                 {...register("name.ar")}
                 className={errors.name?.ar ? "border-red-500" : ""}
               />
-              <span className='text-red-500'>{errors.name?.ar?.message}</span>
+              <span className="text-red-500">{errors.name?.ar?.message}</span>
             </div>
-            <div className='flex flex-col gap-2'>
-              <label htmlFor='description.en'>
+          </div>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="description.en">
                 {tt(locale, {
                   en: "Description (English)",
                   ar: "الوصف (إنجليزي)",
@@ -193,17 +203,17 @@ export default function CreateCourseForm({
               </label>
               <textarea
                 rows={3}
-                id='description.en'
+                id="description.en"
                 {...register("description.en")}
                 className={errors.description?.en ? "border-red-500" : ""}
               />
-              <span className='text-red-500'>
+              <span className="text-red-500">
                 {" "}
                 {errors.description?.en?.message}
               </span>
             </div>
-            <div className='flex flex-col gap-2'>
-              <label htmlFor='description.ar'>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="description.ar">
                 {tt(locale, {
                   en: "Description (Arabic)",
                   ar: "الوصف (عربي)",
@@ -211,80 +221,82 @@ export default function CreateCourseForm({
               </label>
               <textarea
                 rows={3}
-                id='description.ar'
+                id="description.ar"
                 className={errors.description?.ar ? "border-red-500" : ""}
                 {...register("description.ar")}
               />
-              <span className='text-red-500'>
+              <span className="text-red-500">
                 {errors.description?.ar?.message}
               </span>
             </div>
           </div>
-          <div className='flex flex-col gap-4'>
-            <div className='flex flex-col gap-2'>
-              <label htmlFor='courseType'>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="courseType">
                 {tt(locale, {
                   en: "Course Type",
                   ar: "نوع المقرر",
                 })}
               </label>
               <select
-                id='courseType'
+                id="courseType"
                 {...register("courseType")}
                 className={errors.courseType ? "border-red-500" : ""}
               >
-                <option value='MANDATORY'>
+                <option value="MANDATORY">
                   {tt(locale, {
                     en: "Mandatory",
                     ar: "إلزامي",
                   })}
                 </option>
-                <option value='ELECTIVE'>
+                <option value="ELECTIVE">
                   {tt(locale, {
                     en: "Elective",
                     ar: "اختياري",
                   })}
                 </option>
-                <option value='GRADUATION'>
+                <option value="GRADUATION">
                   {tt(locale, {
                     en: "Graduation",
                     ar: "تخرج",
                   })}
                 </option>
               </select>
-              <span className='text-red-500'>{errors.courseType?.message}</span>
+              <span className="text-red-500">{errors.courseType?.message}</span>
             </div>
-            <div className='flex flex-col gap-2'>
-              <label htmlFor='creditHours'>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="creditHours">
                 {tt(locale, {
                   en: "Credit Hours",
                   ar: "ساعات الائتمان",
                 })}
               </label>
               <input
-                type='number'
-                id='creditHours'
+                type="number"
+                id="creditHours"
                 className={errors.creditHours ? "border-red-500" : ""}
                 {...register("creditHours", {
                   valueAsNumber: true,
                 })}
               />
-              <span className='text-red-500'>
+              <span className="text-red-500">
                 {errors.creditHours?.message}
               </span>
             </div>
           </div>
-          <div className='flex flex-col gap-4'>
-            <div className='flex flex-col gap-2 rounded-lg border border-slate-200 p-4'>
-              <label htmlFor='prerequisites'>
+        </div>
+        <div className="flex gap-4">
+          <div className="flex gap-4">
+            <div className="flex flex-col gap-2 rounded-lg border border-slate-200 p-4">
+              <label htmlFor="prerequisites">
                 {tt(locale, {
                   en: "Prerequisites",
                   ar: "المتطلبات السابقة",
                 })}
               </label>
               {prerequisitesFields.map((field, index) => (
-                <div key={field.id} className='flex gap-4'>
-                  <span className='text-red-500'>
+                <div key={field.id} className="flex gap-4">
+                  <span className="text-red-500">
                     {errors.prerequisites &&
                       errors.prerequisites[index]?.prerequisite?.message}
                   </span>
@@ -304,7 +316,7 @@ export default function CreateCourseForm({
                       handlePrerequisiteChange(index, e.target.value)
                     }
                   >
-                    <option value='' disabled>
+                    <option value="" disabled>
                       {tt(locale, {
                         en: "Select Prerequisite",
                         ar: "اختر المتطلب السابق",
@@ -323,7 +335,7 @@ export default function CreateCourseForm({
                       ))}
                   </select>
                   <Button
-                    variant='danger'
+                    variant="danger"
                     onClick={() => handleRemovePrerequisite(index)}
                   >
                     {tt(locale, {
@@ -341,16 +353,16 @@ export default function CreateCourseForm({
               </Button>
             </div>
           </div>
-          <div className='flex flex-col gap-4'>
-            <div className='flex flex-col gap-2 rounded-lg border border-slate-200 p-4'>
-              <label htmlFor='departments'>
+          <div className="flex gap-4">
+            <div className="flex flex-col gap-2 rounded-lg border border-slate-200 p-4">
+              <label htmlFor="departments">
                 {tt(locale, {
                   en: "Departments",
                   ar: "الأقسام",
                 })}
               </label>
               {departmentFields.map((field, index) => (
-                <div key={field.id} className='flex gap-4'>
+                <div key={field.id} className="flex gap-4">
                   <select
                     {...register(`departments.${index}.department` as const)}
                     defaultValue={selectedDepartments[index]}
@@ -364,7 +376,7 @@ export default function CreateCourseForm({
                       handleDepartmentChange(index, e.target.value)
                     }
                   >
-                    <option value='' disabled>
+                    <option value="" disabled>
                       {tt(locale, {
                         en: "Select Department",
                         ar: "اختر القسم",
@@ -382,12 +394,12 @@ export default function CreateCourseForm({
                         </option>
                       ))}
                   </select>
-                  <span className='text-red-500'>
+                  <span className="text-red-500">
                     {errors.departments &&
                       errors.departments[index]?.department?.message}
                   </span>
                   <Button
-                    variant='danger'
+                    variant="danger"
                     onClick={() => handleRemoveDepartment(index)}
                   >
                     {tt(locale, {
@@ -406,8 +418,8 @@ export default function CreateCourseForm({
             </div>
           </div>
         </div>
-        <div className='flex justify-end'>
-          <Button type='submit'>
+        <div className="flex justify-end">
+          <Button type="submit">
             {isSubmitting ? (
               <Spinner />
             ) : (

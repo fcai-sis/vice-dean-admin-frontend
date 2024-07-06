@@ -11,6 +11,7 @@ import { useCurrentLocale } from "@/locales/client";
 import Spinner from "@/components/Spinner";
 import { updateCourseAction } from "./actions";
 import { useState } from "react";
+import { PageHeader } from "@/components/PageBuilder";
 
 const deleteCourseFormSchema = z.object({
   code: z.string(),
@@ -141,6 +142,13 @@ export default function UpdateCourseForm({
 
   return (
     <>
+      <PageHeader
+        title={tt(locale, {
+          en: "Update Course",
+          ar: "تحديث المقرر",
+        })}
+        actions={[]}
+      />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="rounded-lg border border-slate-200 bg-white p-4 w-full gap-4 flex flex-col"
@@ -148,13 +156,13 @@ export default function UpdateCourseForm({
         <div className="flex gap-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <p>
+              <label htmlFor="code">
                 {tt(locale, {
-                  en: "Course Code",
-                  ar: "كود المقرر",
+                  en: "Code",
+                  ar: "الرمز",
                 })}
-              </p>
-              {<p className="text-slate-500">{course.code}</p>}
+              </label>
+              <p className="text-slate-400">{course.code}</p>
               <label htmlFor="name.en">
                 {tt(locale, {
                   en: "Name (English)",
@@ -184,6 +192,8 @@ export default function UpdateCourseForm({
               />
               <span className="text-red-500">{errors.name?.ar?.message}</span>
             </div>
+          </div>
+          <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <label htmlFor="description.en">
                 {tt(locale, {
@@ -231,7 +241,6 @@ export default function UpdateCourseForm({
               <select
                 id="courseType"
                 {...register("courseType")}
-                defaultValue={course.courseType}
                 className={errors.courseType ? "border-red-500" : ""}
               >
                 <option value="MANDATORY">
@@ -275,7 +284,9 @@ export default function UpdateCourseForm({
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
+        </div>
+        <div className="flex gap-4">
+          <div className="flex gap-4">
             <div className="flex flex-col gap-2 rounded-lg border border-slate-200 p-4">
               <label htmlFor="prerequisites">
                 {tt(locale, {
@@ -285,6 +296,11 @@ export default function UpdateCourseForm({
               </label>
               {prerequisitesFields.map((field, index) => (
                 <div key={field.id} className="flex gap-4">
+                  <span className="text-red-500">
+                    {errors.prerequisites &&
+                      errors.prerequisites[index]?.prerequisite?.message}
+                  </span>
+
                   <select
                     {...register(
                       `prerequisites.${index}.prerequisite` as const
@@ -318,12 +334,6 @@ export default function UpdateCourseForm({
                         </option>
                       ))}
                   </select>
-
-                  <span className="text-red-500">
-                    {errors.prerequisites &&
-                      errors.prerequisites[index]?.prerequisite?.message}
-                  </span>
-
                   <Button
                     variant="danger"
                     onClick={() => handleRemovePrerequisite(index)}
@@ -343,7 +353,7 @@ export default function UpdateCourseForm({
               </Button>
             </div>
           </div>
-          <div className="flex flex-col gap-4">
+          <div className="flex gap-4">
             <div className="flex flex-col gap-2 rounded-lg border border-slate-200 p-4">
               <label htmlFor="departments">
                 {tt(locale, {
