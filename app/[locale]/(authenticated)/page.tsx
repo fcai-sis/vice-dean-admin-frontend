@@ -43,11 +43,12 @@ export default function Page() {
         })}
         actions={[]}
       />
-
-      <div className="flex flex-wrap">
-        {charts.map((chart) => (
-          <div key={chart.id}>{chart.component}</div>
-        ))}
+      <div className='min-h-screen bg-gray-200 p-8 overflow-auto'>
+        <div className=' grid grid-col-1 md:grid-cols-2 gap-10'>
+          {charts.map((chart) => (
+            <div key={chart.id}>{chart.component}</div>
+          ))}
+        </div>
       </div>
     </>
   );
