@@ -1,4 +1,5 @@
 "use client";
+
 import dynamic from "next/dynamic";
 import "chart.js/auto";
 import { useCurrentLocale } from "@/locales/client";
@@ -20,7 +21,7 @@ type ChartContainerProps = {
 };
 
 const ChartContainer = ({ children }: ChartContainerProps) => (
-  <div className='w-full md:w-[500px] bg-white p-6 rounded-lg shadow-md'>
+  <div className="w-full md:w-[500px] bg-white p-6 rounded-lg shadow-md">
     {children}
   </div>
 );
@@ -59,7 +60,7 @@ export const NationalityDistributionChart = () => {
   };
   return (
     <ChartContainer>
-      <ResponsiveContainer width='100%' height={400}>
+      <ResponsiveContainer width="100%" height={400}>
         <Bar data={data} />
       </ResponsiveContainer>
     </ChartContainer>
@@ -84,7 +85,7 @@ export const GenderDistributionChart = () => {
   };
   return (
     <ChartContainer>
-      <ResponsiveContainer width='100%' height={400}>
+      <ResponsiveContainer width="100%" height={400}>
         <Bar data={data} />
       </ResponsiveContainer>
     </ChartContainer>
@@ -121,7 +122,7 @@ export const AverageGpaByDepartmentInSemester = () => {
   };
   return (
     <ChartContainer>
-      <ResponsiveContainer width='100%' height={400}>
+      <ResponsiveContainer width="100%" height={400}>
         <Pie data={data} />
       </ResponsiveContainer>
     </ChartContainer>
@@ -146,7 +147,7 @@ export const EnrollmentsEachYear = () => {
   };
   return (
     <ChartContainer>
-      <ResponsiveContainer width='100%' height={400}>
+      <ResponsiveContainer width="100%" height={400}>
         <Line data={data} />
       </ResponsiveContainer>
     </ChartContainer>

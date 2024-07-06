@@ -69,7 +69,6 @@ export default async function Page({
   );
 }
 
-import { DummyLecture, DummySection } from "@/dummy/schedule";
 import { DummySlot } from "@/dummy/slots";
 import {
   CourseModel,
@@ -79,11 +78,11 @@ import {
   SemesterCourseModel,
   SemesterModel,
 } from "@fcai-sis/shared-models";
-import { DummyHall } from "@/dummy/halls";
 import { getSlots } from "../slots/page";
 import CreateLectureOrSectionForm from "./CreateLectureForm";
 import DeleteLectureForm from "./DeleteLectureForm";
 import DeleteSectionForm from "./DeleteSectionForm";
+import dbConnect from "@/database";
 
 /**
  * e.g.
@@ -148,6 +147,7 @@ export async function EntireSchedule({
   schedule,
 }: ScheduleProps) {
   const locale = getCurrentLocale();
+  await dbConnect();
   return (
     <div className="table border-separate border-spacing-2 w-full">
       <div className="table-header-group">

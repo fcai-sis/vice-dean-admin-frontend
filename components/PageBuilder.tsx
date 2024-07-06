@@ -28,7 +28,7 @@ export function PageHeader({ title, actions }: PageHeaderProps) {
   return (
     <div className="w-full flex justify-between py-4">
       <h1>{title}</h1>
-      {actions}
+      <div className="flex gap-4">{actions}</div>
     </div>
   );
 }

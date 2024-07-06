@@ -54,7 +54,12 @@ export default function UpdateDepartmentForm({
       return toast.error(response.error?.message);
     }
 
-    toast.success("Department created successfully!");
+    toast.success(
+      tt(locale, {
+        en: "Department updated successfully",
+        ar: "تم تحديث القسم بنجاح",
+      })
+    );
     router.push(`/departments`);
   };
 

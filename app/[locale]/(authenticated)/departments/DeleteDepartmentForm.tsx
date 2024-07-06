@@ -39,7 +39,12 @@ export default function DeleteDepartmentForm({ code }: { code: string }) {
       return toast.error(deleteDepartmentResponse.error?.message);
     }
 
-    toast.success("Department deleted");
+    toast.success(
+      tt(locale, {
+        en: "Department deleted successfully",
+        ar: "تم حذف القسم بنجاح",
+      })
+    );
     router.push(`/departments`);
   };
 

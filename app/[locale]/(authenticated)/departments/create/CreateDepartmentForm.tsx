@@ -50,7 +50,12 @@ export default function CreateDepartmentForm() {
       return toast.error(createDepartmentResponse.error?.message);
     }
 
-    toast.success("Department created successfully!");
+    toast.success(
+      tt(locale, {
+        en: "Department created successfully",
+        ar: "تم إنشاء القسم بنجاح",
+      })
+    );
     router.push(`/departments`);
   };
 

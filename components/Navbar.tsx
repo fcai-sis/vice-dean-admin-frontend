@@ -4,7 +4,15 @@ import { getI18n } from "@/locales/server";
 import Link from "next/link";
 import Dropdown from "./Dropdown";
 import ChangeLanguageButton from "./ChangeLanguageButton";
-import { Bank, BookStack, Building, Calendar, Home } from "iconoir-react";
+import {
+  Bank,
+  BookStack,
+  Building,
+  Calendar,
+  Clock,
+  Home,
+  StatsReport,
+} from "iconoir-react";
 import Image from "next/image";
 import { tt } from "@/lib";
 
@@ -16,8 +24,11 @@ export default async function Navbar({ locale }: { locale: "en" | "ar" }) {
       <Image src={"/fcai.png"} alt="Logo" width={70} height={70} />
       <div className="flex gap-2">
         <Link href="/" className="flex gap-2 items-center">
-          <Home />
-          {t("home.title")}
+          <StatsReport />
+          {tt(locale, {
+            en: "Statistics & Reports",
+            ar: "الإحصائيات والتقارير",
+          })}
         </Link>
         <Link href="/courses" className="flex gap-2 items-center">
           <BookStack />
@@ -33,6 +44,23 @@ export default async function Navbar({ locale }: { locale: "en" | "ar" }) {
             ar: "الأقسام",
           })}
         </Link>
+
+        <Link href="/semester" className="flex gap-2 items-center">
+          <Clock />
+          {tt(locale, {
+            en: "Semester",
+            ar: "الفصل الدراسي",
+          })}
+        </Link>
+
+        <Link href="/schedule" className="flex gap-2 items-center">
+          <Calendar />
+          {tt(locale, {
+            en: "Schedule",
+            ar: "الجدول",
+          })}
+        </Link>
+
         <Dropdown
           label={tt(locale, {
             en: "Halls & Slots",
@@ -54,21 +82,6 @@ export default async function Navbar({ locale }: { locale: "en" | "ar" }) {
             })}
           </Link>
         </Dropdown>
-        <Link href="/semester" className="flex gap-2 items-center">
-          <Calendar />
-          {tt(locale, {
-            en: "Semester",
-            ar: "الفصل الدراسي",
-          })}
-        </Link>
-
-        <Link href="/schedule" className="flex gap-2 items-center">
-          <Calendar />
-          {tt(locale, {
-            en: "Schedule",
-            ar: "الجدول",
-          })}
-        </Link>
 
         <I18nProviderClient locale={locale}>
           <Dropdown label={t("nav.more")}>

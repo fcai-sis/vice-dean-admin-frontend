@@ -1,10 +1,16 @@
 import { semesterAPI } from "@/api";
-import { getAccessToken } from "@/lib";
+import { getAccessToken, tt } from "@/lib";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import EndSemesterForm from "./EndSemesterForm";
 import BeginDepartmentAssignment from "./BeginDepartmentAssignment";
 import { redirect } from "next/navigation";
+import { CardGrid, PageHeader } from "@/components/PageBuilder";
+import { getCurrentLocale } from "@/locales/server";
+import { ButtonLink } from "@/components/Buttons";
+import Card from "@/components/Card";
+import { CodeChip } from "../departments/page";
+import { DepartmentChip } from "@/components/AnnouncementCard";
 
 export const getLatestSemester = async () => {
   const accessToken = await getAccessToken();
@@ -27,31 +33,35 @@ export const getLatestSemester = async () => {
 export default async function Page({
   searchParams,
 }: Readonly<{ searchParams: { page: string } }>) {
+  const locale = getCurrentLocale();
   const { semester, courses } = await getLatestSemester();
 
   return (
     <>
-      <h1>Latest Semester</h1>
-
-      <div>
-        <h2>
-          <b>Semester Season: </b>
-          {semester.season}
-        </h2>
-
-        {courses.map((course: any) => (
-          <div className="border border-black w-80" key={course.id}>
-            <p>
-              <b>Course: </b>
-              {course.code}
-            </p>
-          </div>
+      <PageHeader
+        title={tt(locale, {
+          en: "Semester",
+          ar: "الفصل الدراسي",
+        })}
+        actions={[
+          <ButtonLink href="/semester/update">
+            {tt(locale, {
+              en: "Update Semester",
+              ar: "تحديث الفصل الدراسي",
+            })}
+          </ButtonLink>,
+          <EndSemesterForm />,
+        ]}
+      />
+      <CardGrid>
+        {courses.map((course: any, index: number) => (
+          <Card key={index}>
+            <h4>{tt(locale, course.name)}</h4>
+            <CodeChip code={course.code} />
+            {/* <DepartmentChip department={course.department} /> */}
+          </Card>
         ))}
-        <Link href="/semester/update">Update Semester</Link>
-      </div>
-
-      <Link href="/semester/create">Create Semester</Link>
-      <EndSemesterForm />
+      </CardGrid>
       <BeginDepartmentAssignment />
     </>
   );

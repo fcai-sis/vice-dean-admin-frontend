@@ -5,8 +5,12 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { endSemesterAction } from "./actions";
 import { Button } from "@/components/Buttons";
+import Spinner from "@/components/Spinner";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
 
 export default function EndSemesterForm() {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -27,10 +31,9 @@ export default function EndSemesterForm() {
 
   return (
     <>
-      <h1>End Latest Semester?</h1>
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <Button
+          variant="danger"
           type="submit"
           disabled={isSubmitting}
           onClick={(e) => {
@@ -45,7 +48,14 @@ export default function EndSemesterForm() {
             }
           }}
         >
-          {isSubmitting ? "Processing..." : "End"}
+          {isSubmitting ? (
+            <Spinner />
+          ) : (
+            tt(locale, {
+              en: "End Semester",
+              ar: "انهاء الفصل",
+            })
+          )}
         </Button>
       </form>
     </>
