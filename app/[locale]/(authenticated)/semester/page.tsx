@@ -62,7 +62,9 @@ export default async function Page({
           </Card>
         ))}
       </CardGrid>
-      <BeginDepartmentAssignment />
+      <div className="flex w-full py-4">
+        <BeginDepartmentAssignment />
+      </div>
     </>
   );
 }

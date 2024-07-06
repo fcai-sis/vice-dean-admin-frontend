@@ -48,14 +48,12 @@ export default async function Page({
   const { slots, timeRanges, days } = await getSlots();
   const { schedule } = await getEntireSchedule();
 
-  console.log("schedule", schedule);
-
   return (
     <>
       <PageHeader
         title={tt(locale, {
-          en: "Lectures",
-          ar: "المحاضرات",
+          en: "Schedule",
+          ar: "الجدول",
         })}
         actions={[]}
       />
@@ -83,6 +81,7 @@ import CreateLectureOrSectionForm from "./CreateLectureForm";
 import DeleteLectureForm from "./DeleteLectureForm";
 import DeleteSectionForm from "./DeleteSectionForm";
 import dbConnect from "@/database";
+import { ButtonLink } from "@/components/Buttons";
 
 /**
  * e.g.
@@ -148,6 +147,26 @@ export async function EntireSchedule({
 }: ScheduleProps) {
   const locale = getCurrentLocale();
   await dbConnect();
+
+  if (timeRanges.length === 0 || days.length === 0) {
+    return (
+      <div className="flex flex-col justify-center items-center gap-4">
+        <p className="text-center text-slate-400">
+          {tt(locale, {
+            en: "No slots found",
+            ar: "لم يتم العثور على فترات",
+          })}
+        </p>
+        <ButtonLink href="/slots">
+          {tt(locale, {
+            en: "Create slots",
+            ar: "إنشاء فترات",
+          })}
+        </ButtonLink>
+      </div>
+    );
+  }
+
   return (
     <div className="table border-separate border-spacing-2 w-full">
       <div className="table-header-group">
@@ -364,8 +383,6 @@ function SectionSlot({ item }: SectionSlotProps) {
         </small>
       </p>
       <p>{tt(locale, section.course.name)}</p>
-      {/* <p>{section.course.code}</p> */}
-      {/* <p>{section.instructor.fullName}</p> */}
       <p className="flex py-1 gap-2">
         <small className="rounded-lg bg-blue-100 text-blue-500 p-2">
           {tt(locale, hall.name)}
