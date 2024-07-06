@@ -5,8 +5,13 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { departmentAssignmentAction } from "./actions";
 import { Button } from "@/components/Buttons";
+import { PageHeader } from "@/components/PageBuilder";
+import { tt } from "@/lib";
+import { useCurrentLocale } from "@/locales/client";
+import Spinner from "@/components/Spinner";
 
 export default function BeginDepartmentAssignment() {
+  const locale = useCurrentLocale();
   const router = useRouter();
   const {
     handleSubmit,
@@ -27,15 +32,18 @@ export default function BeginDepartmentAssignment() {
 
   return (
     <>
-      <h1>Begin Department Assignment?</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
         <Button
           type="submit"
           disabled={isSubmitting}
           onClick={(e) => {
             if (
-              confirm("Are you sure you want to begin department assignment?")
+              confirm(
+                tt(locale, {
+                  en: "Are you sure you want to assign departments to students?",
+                  ar: "هل أنت متأكد أنك تريد تعيين الأقسام للطلاب؟",
+                })
+              )
             ) {
               onSubmit();
             } else {
@@ -43,7 +51,14 @@ export default function BeginDepartmentAssignment() {
             }
           }}
         >
-          {isSubmitting ? "Processing..." : "Assign Departments To Students"}
+          {isSubmitting ? (
+            <Spinner />
+          ) : (
+            tt(locale, {
+              en: "Begin Department Assignment",
+              ar: "بدء تعيين الأقسام",
+            })
+          )}
         </Button>
       </form>
     </>

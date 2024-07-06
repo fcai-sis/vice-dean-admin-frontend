@@ -58,11 +58,17 @@ export default async function Page({
           <Card key={index}>
             <h4>{tt(locale, course.name)}</h4>
             <CodeChip code={course.code} />
-            {/* <DepartmentChip department={course.department} /> */}
           </Card>
         ))}
       </CardGrid>
-      <div className="flex w-full py-4">
+      <div className="flex flex-col w-full py-4">
+        <PageHeader
+          title={tt(locale, {
+            en: "Department Assignment",
+            ar: "تعيين الأقسام",
+          })}
+          actions={[]}
+        />
         <BeginDepartmentAssignment />
       </div>
     </>
