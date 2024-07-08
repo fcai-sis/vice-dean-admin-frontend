@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 export const getAllCourses = async () => {
   const accessToken = await getAccessToken();
 
-  const response = await coursesAPI.get(`/`, {
+  const response = await coursesAPI.get(`/all`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

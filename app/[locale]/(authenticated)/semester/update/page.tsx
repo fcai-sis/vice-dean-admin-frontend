@@ -7,7 +7,7 @@ import UpdateSemesterForm from "./UpdateSemesterForm";
 export const getAllCourses = async () => {
   const accessToken = await getAccessToken();
 
-  const response = await coursesAPI.get(`/`, {
+  const response = await coursesAPI.get(`/all`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -25,17 +25,15 @@ export default async function Page({
 }: Readonly<{
   params: { locale: string };
 }>) {
-  const response = await getAllCourses();
-  const courses = response.courses;
-  const latestSemesterResponse = await getLatestSemester();
-  const latestSemester = latestSemesterResponse.semester;
-  const latestSemesterCourses = latestSemesterResponse.courses;
+  const { courses } = await getAllCourses();
+  const { semester: latestSemester, courses: semesterCourses } =
+    await getLatestSemester();
   return (
     <>
       <UpdateSemesterForm
         courses={courses}
         semester={latestSemester}
-        setCourses={latestSemesterCourses}
+        setCourses={semesterCourses}
       />
     </>
   );

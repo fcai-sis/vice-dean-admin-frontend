@@ -37,7 +37,9 @@ export default function UpdateSemesterForm({
   setCourses: any[];
 }) {
   const locale = useCurrentLocale();
-  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
+  const [selectedCourses, setSelectedCourses] = useState<string[]>(
+    setCourses.map((course) => course.code)
+  );
   const router = useRouter();
 
   const {
@@ -129,7 +131,7 @@ export default function UpdateSemesterForm({
         </select>
         {errors.season && <span>{errors.season.message}</span>}
 
-        <div className="flex flex-col gap-2 justify-center items-center">
+        <div className="flex flex-col gap-2 justify-center items-start">
           {courseFields.map((field, index) => (
             <div key={field.id} className="flex gap-2">
               <select
@@ -151,7 +153,7 @@ export default function UpdateSemesterForm({
                   )
                   .map((course) => (
                     <option key={course.code} value={course.code}>
-                      {course.code}
+                      ({course.code}) {tt(locale, course.name)}
                     </option>
                   ))}
               </select>
