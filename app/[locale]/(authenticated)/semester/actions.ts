@@ -2,7 +2,7 @@
 
 import { getAccessToken } from "@/lib";
 import { CreateSemesterFormValues } from "./create/CreateSemesterForm";
-import { departmentEnrollmentAPI, semesterAPI } from "@/api";
+import { departmentEnrollmentAPI, scheduleAPI, semesterAPI } from "@/api";
 import { revalidatePath } from "next/cache";
 import { UpdateSemesterFormValues } from "./update/UpdateSemesterForm";
 
@@ -69,7 +69,7 @@ export const updateSemesterAction = async (data: UpdateSemesterFormValues) => {
 export const endSemesterAction = async () => {
   const accessToken = await getAccessToken();
 
-  const response = await semesterAPI.post(`/end`, {
+  const response = await scheduleAPI.post(`/semester/end`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

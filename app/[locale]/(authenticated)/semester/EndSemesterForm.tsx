@@ -22,7 +22,10 @@ export default function EndSemesterForm() {
     const endSemesterResponse = await endSemesterAction();
 
     if (!endSemesterResponse.success) {
-      return toast.error(endSemesterResponse.error?.message);
+      for (const error of endSemesterResponse.errors) {
+        toast.error(error.message);
+      }
+      return;
     }
 
     toast.success("Semester has ended...");
@@ -32,22 +35,7 @@ export default function EndSemesterForm() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Button
-          variant="danger"
-          type="submit"
-          disabled={isSubmitting}
-          onClick={(e) => {
-            if (
-              confirm(
-                "Are you sure you want to end the semester? This action is irreversible."
-              )
-            ) {
-              onSubmit();
-            } else {
-              e.preventDefault();
-            }
-          }}
-        >
+        <Button variant="danger" type="submit" disabled={isSubmitting}>
           {isSubmitting ? (
             <Spinner />
           ) : (

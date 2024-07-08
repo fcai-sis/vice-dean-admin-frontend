@@ -65,7 +65,7 @@ export default function Schedule({
 }: ScheduleProps) {
   const locale = getCurrentLocale();
   return (
-    <div className="table border-separate border-spacing-2 w-full">
+    <div className="table border-separate border-spacing-2 w-full pe-24">
       <div className="table-header-group">
         <div className="table-row">
           <div className="table-cell p-2"></div>
@@ -74,14 +74,16 @@ export default function Schedule({
               className="table-cell rounded-lg p-2 bg-slate-50 border border-slate-200 text-center"
               key={JSON.stringify(timeRange)}
             >
-              <p dir="ltr">{formatSlotTime(timeRange as unknown as any)}</p>
+              <p dir="ltr" className="text-nowrap">
+                {formatSlotTime(timeRange as unknown as any)}
+              </p>
             </div>
           ))}
         </div>
       </div>
       {Object.keys(slots).map((currentDay) => (
         <div className="table-row" key={currentDay}>
-          <div className="table-cell rounded-lg p-2 bg-slate-50 border border-slate-200">
+          <div className="table-cell rounded-lg p-2 bg-slate-50 border border-slate-200 text-start content-start">
             {tt(locale, dayLocalizedEnum[currentDay as DayEnumType])}
           </div>
           {timeRanges.map((currentTimeRange, index) => (

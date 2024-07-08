@@ -99,7 +99,7 @@ export default function CreateSemesterForm({ courses }: { courses: any[] }) {
         </select>
         {errors.season && <span>{errors.season.message}</span>}
 
-        <div className="flex flex-col gap-2 justify-center items-center">
+        <div className="flex flex-col gap-2 justify-center items-start">
           {courseFields.map((field, index) => (
             <div key={field.id} className="flex gap-2">
               <select
@@ -118,7 +118,7 @@ export default function CreateSemesterForm({ courses }: { courses: any[] }) {
                   )
                   .map((course) => (
                     <option key={course.code} value={course.code}>
-                      {course.code}
+                      ({course.code}) {tt(locale, course.name)}
                     </option>
                   ))}
               </select>

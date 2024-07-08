@@ -160,7 +160,7 @@ export default function CreateBylawForm({
     }
 
     toast.success("Bylaw created successfully!");
-    router.push(`/bylaws`);
+    router.push(`/`);
   };
 
   return (
@@ -351,7 +351,7 @@ export default function CreateBylawForm({
                 <Button
                   type="button"
                   onClick={() => removeGradeWeight(index)}
-                  className="mt-2 text-red-500 hover:underline"
+                  variant="danger"
                 >
                   {t("bylaw.create.form.remove")}
                 </Button>
@@ -367,7 +367,6 @@ export default function CreateBylawForm({
                 percentage: { min: 0, max: 100 },
               })
             }
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
             {t("bylaw.create.form.addGradeWeight")}
           </Button>
@@ -486,7 +485,7 @@ export default function CreateBylawForm({
                 <Button
                   type="button"
                   onClick={() => removeLevelRequirement(index)}
-                  className="mt-2 text-red-500 hover:underline"
+                  variant="danger"
                 >
                   {t("bylaw.create.form.remove")}
                 </Button>
@@ -504,7 +503,6 @@ export default function CreateBylawForm({
                 maxYears: 1,
               })
             }
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
           >
             {t("bylaw.create.form.addLevelRequirements")}
           </Button>
@@ -615,9 +613,8 @@ export default function CreateBylawForm({
                   </div>
                 )}
                 <Button
-                  type="button"
                   onClick={() => removeGraduationProjectRequirement(index)}
-                  className="mt-2 text-red-500 hover:underline"
+                  variant="danger"
                 >
                   {t("bylaw.create.form.remove")}
                 </Button>
@@ -635,7 +632,6 @@ export default function CreateBylawForm({
                   totalHours: 0,
                 })
               }
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
             >
               {t("bylaw.create.form.addGraduationProjectRequirements")}
             </Button>
@@ -692,11 +688,7 @@ export default function CreateBylawForm({
           </p>
         </div>
 
-        <Button
-          type="submit"
-          disabled={isSubmitting}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
-        >
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting
             ? t("bylaw.create.form.submitting")
             : t("bylaw.create.form.submit")}

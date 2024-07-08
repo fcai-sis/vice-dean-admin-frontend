@@ -187,7 +187,7 @@ function CreateWithNewTimeRangeSlotForm(
       }
       onClick={props.onClick}
     >
-      <p className="text-center text-sm flex items-center justify-center gap-2 text-blue-500">
+      <p className="text-center text-sm flex items-center justify-center gap-2 text-blue-500 text-nowrap">
         <Plus className="[&_*]:stroke-blue-500" />
         {tt(locale, {
           en: "Create with new time slot",
